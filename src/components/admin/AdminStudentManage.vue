@@ -1,13 +1,21 @@
 <template>
   <div v-wechat-title="$route.meta.title" class="home" style="padding: 20px">
     <!--    功能-->
-    <div style="margin: 10px 0">
-      <el-button type="primary" @click="add">新增</el-button>
-    </div>
+
     <!--    搜索-->
     <div style="margin: 10px 0">
-      <el-input v-model="search" placeholder="按姓名搜索" style="width: 20%" clearable></el-input>
-      <el-button type="primary" style="margin-left: 5px" @click="load">搜索</el-button>
+      <el-input v-model="search" placeholder="设备名称" style="width: 20%;  margin-right:20px" clearable></el-input>
+      <el-input v-model="search" placeholder="所属机构" style="width: 20%;  margin-right:20px" clearable></el-input>
+      <el-input v-model="search" placeholder="所属分组" style="width: 20%;  margin-right:20px" clearable></el-input>
+      <el-input v-model="search" placeholder="MAC地址" style="width: 20%;  margin-right:20px" clearable></el-input>
+    </div>
+    <div style="margin: 10px 0">
+      <el-input v-model="search" placeholder="分辨率" style="width: 20%;  margin-right:20px" clearable></el-input>
+      <el-input v-model="search" placeholder="设备状态" style="width: 20%;  margin-right:20px" clearable></el-input>
+      <el-input v-model="search" placeholder="系统版本" style="width: 20%;  margin-right:20px" clearable></el-input>
+      <el-input v-model="search" placeholder="当前计划" style="width: 20%;  margin-right:20px" clearable></el-input>
+      <el-button style="margin-left: 10px; margin-right:10px" @click="load">重置</el-button>
+      <el-button type="primary" style="margin-left: 5px; margin-right:20px" @click="load">搜索</el-button>
     </div>
     <!--表格-->
     <el-table
@@ -15,20 +23,22 @@
         stripe
         style="width: 100%; text-align: center"
         border>
-      <el-table-column prop="studentId" label="学号" sortable/>
-      <el-table-column prop="studentName" label="姓名"/>
-      <el-table-column prop="sex" label="性别"/>
-      <el-table-column prop="grade" label="入学年份"/>
-      <el-table-column prop="major" label="专业"/>
-      <el-table-column prop="clazz" label="年级"/>
-      <el-table-column prop="institute" label="学院"/>
-      <el-table-column prop="tel" label="电话"/>
-      <el-table-column prop="email" label="邮箱"/>
+      <el-table-column prop="studentId" label="设备名称" sortable/>
+      <el-table-column prop="studentName" label="所属机构"/>
+      <el-table-column prop="sex" label="所属分组"/>
+      <el-table-column prop="grade" label="MAC地址"/>
+      <el-table-column prop="major" label="分辨率"/>
+      <el-table-column prop="clazz" label="设备状态"/>
+      <el-table-column prop="institute" label="系统升级"/>
+      <el-table-column prop="tel" label="当前计划"/>
 
 
       <el-table-column label="操作">
         <template #default="scope">
-          <el-button @click="handleEdit(scope.row)">编辑</el-button>
+          <el-button @click="handleEdit(scope.row)">详情</el-button>
+          <el-button @click="handleEdit(scope.row)">控制</el-button>
+          <el-button @click="handleEdit(scope.row)">刷新</el-button>
+          <el-button @click="edit">编辑</el-button>          
           <el-popconfirm title="确认删除?" @confirm="handleDelete(scope.row.studentId)">
             <template #reference>
               <el-button type="danger">删除</el-button>
@@ -39,7 +49,7 @@
     </el-table>
 
     <div style="margin: 10px 0">
-      <!--      分页-->
+      <!--分页-->
       <el-pagination
           v-model:currentPage="currentPage4"
           v-model:page-size="pageSize4"
@@ -52,35 +62,18 @@
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"/>
       <!--弹窗-->
-      <el-dialog v-model="dialogVisible" title="提示" width="30%">
+      <el-dialog v-model="dv1" title="编辑设备" width="30%">
         <el-form :model="form" label-width="120px">
-          <el-form-item label="用户名">
-            <el-input v-model="form.studentName" style="width:80%"/>
+          <el-form-item label="设备名称">
+            <el-input v-model="form.sex" style="width:80%"/>
           </el-form-item>
-          <el-form-item label="专业">
-            <el-input v-model="form.major" style="width:80%"/>
-          </el-form-item>
-          <el-form-item label="性别">
-            <el-radio v-model="form.sex" label="男" size="large">男</el-radio>
-            <el-radio v-model="form.sex" label="女" size="large">女</el-radio>
-            <el-radio v-model="form.sex" label="未知" size="large">未知</el-radio>
-          </el-form-item>
-          <el-form-item label="入学年份">
-            <el-input v-model="form.grade" style="width:80%"/>
-          </el-form-item>
-          <el-form-item label="年级">
-            <el-input v-model="form.clazz" style="width:80%"/>
-          </el-form-item>
-          <el-form-item label="学院">
-            <el-input v-model="form.institute" style="width:80%"/>
-          </el-form-item>
-          <el-form-item label="电话">
-            <el-input v-model="form.tel" style="width:80%"/>
+          <el-form-item label="所属分组">
+            <el-input v-model="form.email" style="width:80%"/>
           </el-form-item>
         </el-form>
         <template #footer>
       <span class="dialog-footer">
-        <el-button @click="dialogVisible = false">取消</el-button>
+        <el-button @click="dv1 = false">取消</el-button>
         <el-button type="primary" @click="save">确认</el-button>
       </span>
         </template>
@@ -104,7 +97,7 @@ export default {
       currentPage4: 1,
       pageSize4: 10,
       total: 0,
-      dialogVisible:false,
+      dv1:false,
       form:{},
       tableData: []
     }
@@ -126,8 +119,8 @@ export default {
         this.total = res.data.total
       })
     },
-    add() {
-      this.dialogVisible = true
+    edit() {
+      this.dv1 = true
       this.form = {}
 
     },
@@ -147,7 +140,7 @@ export default {
             })
           }
           this.load()//刷新表格的数据
-          this.dialogVisible = false  //关闭弹窗
+          this.dv1 = false  //关闭弹窗
         })
       }
       else{
@@ -165,14 +158,14 @@ export default {
             })
           }
           this.load()//刷新表格的数据
-          this.dialogVisible = false  //关闭弹窗
+          this.dv1 = false  //关闭弹窗
         })
       }
 
     },
     handleEdit(row) {
       this.form = JSON.parse(JSON.stringify(row))
-      this.dialogVisible = true
+      this.dv1 = true
 
     },
     handleDelete(id) {
