@@ -64,20 +64,6 @@ export default {
     return{
       form:{},
       value:ref('') ,
-      options:[
-        {
-          value: 'student',
-          label: '学生',
-        },
-        {
-          value: 'teacher',
-          label: '教师',
-        },
-        {
-          value: 'admin',
-          label: '管理员',
-        }
-      ],
       rules:{
         username: [
           { required: true, message: '请输入账号', trigger: 'blur' }
@@ -101,7 +87,7 @@ export default {
                 })
                 console.log(res.data)
                 this.$cookies.set("data",res.data)
-                this.$cookies.set("name","Stars")
+                this.$cookies.set("name","画布系统")
                 this.$router.push("/admin")//登录成功之后进行页面跳转，跳转到主页
               } else {
                 this.$message({

@@ -18,17 +18,28 @@
       <el-table-column prop="userName" label="用户ID" sortable/>
       <el-table-column prop="userMechanism" label="所属机构"/>
       <el-table-column prop="userRole" label="所属角色"/>
-      <el-table-column prop="userState" label="状态"/>
+      <el-table-column prop="userState" label="状态">
+        <template #default="scope">
+          <el-tag v-if="scope.row.userState==1" type="success">在线</el-tag>
+          <el-tag v-if="scope.row.userState==0" type="danger">离线</el-tag>
+        </template>
+      </el-table-column>
       <el-table-column prop="userRname" label="姓名"/>
       <el-table-column prop="userEmail" label="邮箱"/>
       <el-table-column prop="userUpdate" label="更新时间" sortable/>
-      <el-table-column prop="userType" label="用户类型"/>
+      <el-table-column prop="userType" label="用户类型">
+        <template #default="scope">
+          <el-tag v-if="scope.row.userState==1">当前用户</el-tag>
+          <el-tag v-if="scope.row.userType==1" type="warning">管理员</el-tag>
+          <el-tag v-else type="info">其他用户</el-tag>
+        </template>
+      </el-table-column>>
 
 
       <el-table-column label="操作">
         <template #default="scope">
           <el-button @click="handleEdit(scope.row)">编辑</el-button>
-          <el-popconfirm title="确认删除?" @confirm="handleDelete(scope.row.userName)">
+          <el-popconfirm title="确认删除?" @confirm="handleDelete(scope.row.userId)">
             <template #reference>
               <el-button type="danger">删除</el-button>
             </template>
@@ -56,24 +67,34 @@
 <!--          <el-form-item label="管理员ID">-->
 <!--            <el-input v-model="form.adminId" style="width:80%"/>-->
 <!--          </el-form-item>-->
-          <el-form-item label="管理员姓名">
-            <el-input v-model="form.adminName" style="width:80%"/>
+          <el-form-item label="用户ID" disabled="true">
+            <el-input v-model="form.userName" style="width:80%"/>
           </el-form-item>
-          <el-form-item label="性别">
-            <el-input v-model="form.sex" style="width:80%"/>
+          <el-form-item label="所属机构">
+            <el-select v-model="form.userMechanism" placeholder="">
+              <el-option label="浙大城市学院" value="浙大城市学院" />
+              <el-option label="浙江大学" value="浙江大学" />
+            </el-select>          </el-form-item>
+          <el-form-item label="所属角色">
+            <el-select v-model="form.userRole" placeholder="">
+              <el-option label="学生" value="学生" />
+              <el-option label="老师" value="老师" />
+              <el-option label="管理员" value="管理员" />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="姓名">
+            <el-input v-model="form.userRname" style="width:80%"/>
           </el-form-item>
           <el-form-item label="邮箱">
-            <el-input v-model="form.email" style="width:80%"/>
+            <el-input v-model="form.userEmail" style="width:80%"/>
           </el-form-item>
-          <el-form-item label="密码">
-            <el-input v-model="form.pwd" style="width:80%"/>
-          </el-form-item>
-          <el-form-item label="电话">
-            <el-input v-model="form.tel" style="width:80%"/>
-          </el-form-item>
-          <el-form-item label="卡号">
-            <el-input v-model="form.carId" style="width:80%"/>
-          </el-form-item>
+<!--          <el-form-item label="用户类型">-->
+<!--            <el-select v-model="form.userType" placeholder="">-->
+<!--              <el-option label="学生" value="shanghai" />-->
+<!--              <el-option label="老师" value="beijing" />-->
+<!--              <el-option label="管理员" value="beijing" />-->
+<!--            </el-select>-->
+<!--          </el-form-item>-->
 
         </el-form>
         <template #footer>
@@ -101,6 +122,7 @@ export default {
   data() {
     return {
       search: '',
+      edit:0,
       currentPage4: 1,
       pageSize4: 10,
       total: 0,
@@ -127,10 +149,10 @@ export default {
       })
     },
     save(){
-      if(this.form.adminId){
-        request.put("/admin",this.form).then(res => {
+      if(this.edit){
+        request.put("/user",this.form).then(res => {
           console.log(res)
-          if(res.code === '0'){
+          if(res.code === 200){
             this.$message({
               type:"success",
               message:"更新成功"
@@ -141,14 +163,15 @@ export default {
               message:res.msg
             })
           }
+          this.edit = 0
           this.load()//刷新表格的数据
           this.dialogVisible = false  //关闭弹窗
         })
       }
       else{
-        request.post("/admin",this.form).then(res => {
+        request.post("/user",this.form).then(res => {
           console.log(res)
-          if(res.code === '0'){
+          if(res.code === 200){
             this.$message({
               type:"success",
               message:"新增成功"
@@ -168,18 +191,20 @@ export default {
     handleEdit(row) {
       this.form = JSON.parse(JSON.stringify(row))
       this.dialogVisible = true
-
+      this.edit = 1
     },
     add(){
       this.dialogVisible = true
       this.form = {}
+      this.form.userState = 0
+      this.form.userType = 0
     },
 
     handleDelete(id) {
       console.log(id)
       request.delete("/user/" + id).then(res => {
         console.log(res)
-        if(res.code === '0'){
+        if(res.code === 200){
           this.$message({
             type:"success",
             message:"删除成功"
