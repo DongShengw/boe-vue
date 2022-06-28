@@ -119,7 +119,7 @@
     <!--    功能-->
       <el-table-column label="操作"  width="400">
         <template #default="scope">
-          <el-button @click="details">详情</el-button>
+          <el-button @click="details(scope.row)">详情</el-button>
           <el-button @click="handleEdit(scope.row)">控制</el-button>
           <el-button @click="handleEdit(scope.row)">编辑</el-button>
           <el-popconfirm
@@ -167,7 +167,7 @@
       </el-dialog>
 
       <el-dialog v-model="dv2" title="设备详情" width="30%">
-        <el-form :model="form1" label-width="120px">
+        <el-form :model="form" label-width="120px">
           <el-tabs type="border-card">
             <el-tab-pane label="设备信息">
               设备型号：HiDPTAndroid Hi3751V553<br>
@@ -191,10 +191,14 @@
               安装位置：中国浙江省杭州市拱墅区上塘街道东教路<br>
             </el-tab-pane>
             <el-tab-pane label="状态信息">
-              设备状态：离线<br>
-              当前计划：--<br>
-              设备运行时长：1 天 11 分钟<br>
-              最后心跳时间：2022-06-27 16:01:20<br>
+              <span>设备状态: </span>
+                <el-tag v-if="form.deviceState==1" type="success">空闲</el-tag>
+                <el-tag v-if="form.deviceState==2">播放</el-tag>
+                <el-tag v-if="form.deviceState==0" type="danger">离线</el-tag>
+              <br>
+              <span>当前计划：{{form.deviceSchedule}}</span><br>
+              <span>设备运行时长：1 天 30 分钟</span><br>
+              <span>最后心跳时间: 2022-06-27 16:01:20</span><br>  
             </el-tab-pane>
           </el-tabs>
         </el-form>
@@ -347,9 +351,9 @@ export default {
       this.searchSchedule = "";
       this.searchSystem = "";
     },
-    details() {
+    details(row) {
       this.dv2 = true;
-      this.form = {};
+      this.form = JSON.parse(JSON.stringify(row));
     },
     save1() {
       this.dv2 = false; //关闭弹窗
