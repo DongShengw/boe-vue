@@ -43,14 +43,14 @@
           <el-icon><user /></el-icon>
           <span>设备管理</span>
         </template>
-        <el-menu-item index="adminStudentManage">设备列表</el-menu-item>
+        <el-menu-item index="deviceList">设备列表</el-menu-item>
       </el-sub-menu>
       <el-sub-menu index="6">
         <template #title>
           <el-icon><user-filled /></el-icon>
           <span>系统管理</span>
         </template>
-        <el-menu-item index="adminManage">账户管理</el-menu-item>
+        <el-menu-item index="adminManage">用户管理</el-menu-item>
       </el-sub-menu>
 
     </el-menu>

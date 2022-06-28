@@ -18,7 +18,7 @@ const routes = [
         name: 'adminManage',
         component: () => import("@/components/admin/AdminManage"),
         meta:{
-          title:'Stars管理员管理'
+          title:'用户管理'
         }
       },
       {
@@ -30,11 +30,11 @@ const routes = [
         }
       },
       {
-        path: '/adminExamManage',
-        name: 'adminExamManage',
-        component: () => import("@/components/admin/AdminExamManage"),
+        path: '/deviceList',
+        name: 'deviceList',
+        component: () => import("@/components/admin/deviceList"),
         meta:{
-          title:'Stars考试管理'
+          title:'设备管理'
         }
       },
       {
@@ -49,7 +49,7 @@ const routes = [
       {
         path: '/adminStudentManage',
         name: 'adminStudentManage',
-        component: () => import("@/components/admin/AdminStudentManage"),
+        component: () => import("@/components/admin/deviceList"),
         meta:{
           title:'Stars学生管理'
         }
