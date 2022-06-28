@@ -38,7 +38,7 @@
           <el-button @click="details">详情</el-button>
           <el-button @click="handleEdit(scope.row)">控制</el-button>
           <el-button @click="handleEdit(scope.row)">刷新</el-button>
-          <el-button @click="edit">编辑</el-button>          
+          <el-button @click="edit">编辑</el-button>
           <el-popconfirm title="确认删除?" @confirm="handleDelete(scope.row.studentId)">
             <template #reference>
               <el-button type="danger">删除</el-button>
@@ -106,7 +106,7 @@
 import request from "@/utils/request";
 
 export default {
-  name: 'allStudentManage',
+  name: 'deviceList',
   components: {},
   data() {
     return {

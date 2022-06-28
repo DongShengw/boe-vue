@@ -33,7 +33,7 @@
           <el-tag v-if="scope.row.userType==1" type="warning">管理员</el-tag>
           <el-tag v-else type="info">其他用户</el-tag>
         </template>
-      </el-table-column>>
+      </el-table-column>
 
 
       <el-table-column label="操作">
@@ -79,7 +79,6 @@
             <el-select v-model="form.userRole" placeholder="">
               <el-option label="学生" value="学生" />
               <el-option label="老师" value="老师" />
-              <el-option label="管理员" value="管理员" />
             </el-select>
           </el-form-item>
           <el-form-item label="姓名">
