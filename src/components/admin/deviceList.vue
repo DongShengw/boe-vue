@@ -117,7 +117,7 @@
       <el-table-column prop="deviceSchedule" label="当前计划" />
 
     <!--    功能-->
-      <el-table-column label="操作">
+      <el-table-column label="操作"  width="400">
         <template #default="scope">
           <el-button @click="details">详情</el-button>
           <el-button @click="handleEdit(scope.row)">控制</el-button>
@@ -169,18 +169,33 @@
       <el-dialog v-model="dv2" title="设备详情" width="30%">
         <el-form :model="form1" label-width="120px">
           <el-tabs type="border-card">
-            <el-tab-pane label="设备信息">设备型号：HiDPTAndroid Hi3751V553
-系统版本：BOE_iGallery32_V13103_V5.2.0
-设备IP:192.168.53.212
-信发版本：1.3.1
-有线MAC地址：A0BB3ED3861D
-无线MAC地址：A0BB3ED2F376
-运行内存：0.96 GB
-SN：T232BS200721000123
-存储空间： 4.65 GB可用（共 5.39 GB）
-激活时间：2022-06-23 10:40:12</el-tab-pane>
-            <el-tab-pane label="安装信息">Config</el-tab-pane>
-            <el-tab-pane label="状态信息">Role</el-tab-pane>
+            <el-tab-pane label="设备信息">
+              设备型号：HiDPTAndroid Hi3751V553<br>
+              系统版本：BOE_iGallery32_V13103_V5.2.0<br>
+              设备IP:192.168.53.212<br>
+              信发版本：1.3.1<br>
+              有线MAC地址：A0BB3ED3861D<br>
+              无线MAC地址：A0BB3ED2F376<br>
+              运行内存：0.96 GB<br>
+              SN：T232BS200721000123<br>
+              存储空间： 4.65 GB可用（共 5.39 GB）<br>
+              激活时间：2022-06-23 10:40:12<br>
+            </el-tab-pane>
+            <el-tab-pane label="安装信息">
+              设备名称：测试误删<br>
+              注册时间：2022-06-27 14:31:14<br>
+              所属分组：11111<br>
+              分辨率：1920x1080<br>
+              所属机构：城院罗老师测试<br>
+              屏显方式：横屏<br>
+              安装位置：中国浙江省杭州市拱墅区上塘街道东教路<br>
+            </el-tab-pane>
+            <el-tab-pane label="状态信息">
+              设备状态：离线<br>
+              当前计划：--<br>
+              设备运行时长：1 天 11 分钟<br>
+              最后心跳时间：2022-06-27 16:01:20<br>
+            </el-tab-pane>
           </el-tabs>
         </el-form>
         <template #footer>
