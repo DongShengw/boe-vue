@@ -49,7 +49,7 @@
         clearable
       >
         <el-option
-          v-for="item in options"
+          v-for="item in system"
           :key="item.value"
           :label="item.label"
           :value="item.value"
@@ -61,7 +61,7 @@
         style="width: 20%; margin-right: 20px"
         clearable
       ></el-select>
-      <el-button style="margin-left: 10px; margin-right: 10px" @click="load"
+      <el-button style="margin-left: 10px; margin-right: 10px" @click="reset"
         >重置</el-button
       >
       <el-button
@@ -84,7 +84,7 @@
       <el-table-column prop="macAddress" label="MAC地址" />
       <el-table-column prop="resolvingPower" label="分辨率" />
       <el-table-column prop="deviceState" label="设备状态" />
-      <el-table-column prop="institute" label="系统升级" />
+      <el-table-column prop="deviceSystem" label="系统升级" />
       <el-table-column prop="deviceSchedule" label="当前计划" />
 
       <el-table-column label="操作">
@@ -95,7 +95,7 @@
           <el-button @click="edit">编辑</el-button>
           <el-popconfirm
             title="确认删除?"
-            @confirm="handleDelete(scope.row.studentId)"
+            @confirm="handleDelete(scope.row.deviceId)"
           >
             <template #reference>
               <el-button type="danger">删除</el-button>
@@ -159,7 +159,6 @@
 
 <script>
 // @ is an alias to /src
-import { ref } from "vue";
 
 import request from "@/utils/request";
 
@@ -168,6 +167,7 @@ export default {
   components: {},
   data() {
     return {
+      edit: 0,
       searchName:'',
       searchMechanism:'',
       searchGroup:'',
@@ -183,21 +183,18 @@ export default {
       dv2: false,
       form: {},
       tableData: [],
-      options: [
+      schedule:[],
+      system: [
         {
-          value: "Option1",
-          label: "全部",
-        },
-        {
-          value: "Option2",
+          value: "已是最新",
           label: "已是最新",
         },
         {
-          value: "Option3",
+          value: "升级",
           label: "升级",
         },
         {
-          value: "Option4",
+          value: "有新版本",
           label: "有新版本",
         },
       ],
@@ -229,6 +226,16 @@ export default {
           this.total = res.data.total;
         });
     },
+    reset() {
+      this.searchName='';
+      this.searchMechanism='';
+      this.searchGroup='';
+      this.searchMAC='';
+      this.searchResolving='';
+      this.searchState='';
+      this.searchSchedule='';
+      this.searchSystem='';
+    },
     edit() {
       this.dv1 = true;
       this.form = {};
@@ -238,10 +245,10 @@ export default {
       this.form = {};
     },
     save() {
-      if (this.form.studentId) {
-        request.put("/student", this.form).then((res) => {
+      if (this.edit) {
+        request.put("/device", this.form).then((res) => {
           console.log(res);
-          if (res.code === "0") {
+          if (res.code === 200) {
             this.$message({
               type: "success",
               message: "更新成功",
@@ -252,13 +259,14 @@ export default {
               message: res.msg,
             });
           }
+          this.edit = 0;
           this.load(); //刷新表格的数据
           this.dv1 = false; //关闭弹窗
         });
       } else {
-        request.post("/student", this.form).then((res) => {
+        request.post("/device", this.form).then((res) => {
           console.log(res);
-          if (res.code === "0") {
+          if (res.code === 200) {
             this.$message({
               type: "success",
               message: "新增成功",
@@ -277,12 +285,13 @@ export default {
     handleEdit(row) {
       this.form = JSON.parse(JSON.stringify(row));
       this.dv1 = true;
+      this.edit = 1;
     },
     handleDelete(id) {
       console.log(id);
-      request.delete("/student/" + id).then((res) => {
+      request.delete("/device/" + id).then((res) => {
         console.log(res);
-        if (res.code === "0") {
+        if (res.code === 200) {
           this.$message({
             type: "success",
             message: "删除成功",
