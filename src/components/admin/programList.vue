@@ -2,42 +2,81 @@
   <div v-wechat-title="$route.meta.title" class="home" style="padding: 20px">
     <!--    功能-->
     <div style="margin: 10px 0">
-      <el-button type="primary" @click="add">新增节目</el-button>
-      <el-button type="primary" :disabled="isAll()" @click="pub">批量发布</el-button>
-      <el-button type="primary" :disabled="isAll()" @click="Delete">批量删除</el-button>
+      <el-input
+          v-model="searchName"
+          placeholder="节目名称"
+          style="width: 20%; margin-right: 20px"
+          clearable
+      ></el-input>
+      <el-select
+          v-model="searchResolving"
+          placeholder="分辨率"
+          style="width: 20%; margin-right: 20px"
+          clearable
+      >
+        <el-option
+            v-for="item in resolving"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+        />
+      </el-select>
+      <el-select
+          v-model="searchState"
+          placeholder="节目状态"
+          style="width: 20%; margin-right: 20px"
+          clearable
+      >
+        <el-option
+            v-for="item in state"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+        />
+      </el-select>
+      <el-button style="margin-left: 10px; margin-right: 10px" @click="reset"
+      >重置</el-button
+      >
+      <el-button
+          type="primary"
+          style="margin-left: 5px; margin-right: 20px"
+          @click="load"
+      >搜索</el-button
+      >
     </div>
-    <!--    搜索-->
     <div style="margin: 10px 0">
-      <el-input v-model="search" placeholder="请输入关键字" style="width: 20%" clearable></el-input>
-      <el-button type="primary" style="margin-left: 5px" @click="load">搜索</el-button>
+      <el-button type="primary" @click="add">新增节目</el-button>
+      <el-button type="primary" :disabled="isAll" @click="pub">批量发布</el-button>
+      <el-button type="primary" :disabled="isAll" @click="Delete">批量删除</el-button>
     </div>
+
     <!--表格-->
     <el-table
         :data="tableData"
         stripe
-        @selection-change="handleSelectionChange"
+        @selection-change="(selections)=>{handleSelectionChange(selections)}"
         style="width: 100%; text-align: center"
         border>
       <el-table-column type="selection" width="55" />
-      <el-table-column prop="userName" label="用户ID" sortable/>
-      <el-table-column prop="userMechanism" label="所属机构"/>
-      <el-table-column prop="userRole" label="所属角色"/>
-      <el-table-column prop="userState" label="状态">
+      <el-table-column label="缩略图" width="130">
         <template #default="scope">
-          <el-tag v-if="scope.row.userState==1" type="success">在线</el-tag>
-          <el-tag v-if="scope.row.userState==0" type="danger">离线</el-tag>
+          <div style="display: flex; align-items: center">
+            <el-image :preview-src-list="scope.row.programImg"/>
+          </div>
         </template>
       </el-table-column>
-      <el-table-column prop="userRname" label="姓名"/>
-      <el-table-column prop="userEmail" label="邮箱"/>
-      <el-table-column prop="userUpdate" label="更新时间" sortable/>
-      <el-table-column prop="userType" label="用户类型">
-        <template #default="scope">
-          <el-tag v-if="scope.row.userState==1">当前用户</el-tag>
-          <el-tag v-if="scope.row.userType==1" type="warning">管理员</el-tag>
-          <el-tag v-else type="info">其他用户</el-tag>
-        </template>
+      <el-table-column prop="programName" label="节目名称" sortable/>
+      <el-table-column prop="resolvingPower" label="分辨率"/>
+      <el-table-column prop="programTime" label="节目时长"/>
+      <el-table-column prop="programSize" label="节目大小"/>
+      <el-table-column prop="programState" label="节目状态">
+         <template #default="scope">
+            <el-tag v-if="scope.row.userState==1" type="success">在线</el-tag>
+            <el-tag v-if="scope.row.userState==0" type="danger">离线</el-tag>
+         </template>
       </el-table-column>
+      <el-table-column prop="programAuthor" label="作者"/>
+      <el-table-column prop="programUpdate" label="更新时间"/>
 
 
       <el-table-column label="操作">
@@ -71,11 +110,11 @@
           <!--          <el-form-item label="管理员ID">-->
           <!--            <el-input v-model="form.adminId" style="width:80%"/>-->
           <!--          </el-form-item>-->
-          <el-form-item label="用户ID" disabled="true">
-            <el-input v-model="form.userName" style="width:80%"/>
+          <el-form-item label="节目名称" disabled="true">
+            <el-input v-model="form.programName" style="width:80%"/>
           </el-form-item>
-          <el-form-item label="所属机构">
-            <el-select v-model="form.userMechanism" placeholder="">
+          <el-form-item label="分辨率">
+            <el-select v-model="form.resolvingPower" placeholder="">
               <el-option label="浙大城市学院" value="浙大城市学院" />
               <el-option label="浙江大学" value="浙江大学" />
             </el-select>          </el-form-item>
@@ -124,8 +163,39 @@ export default {
   },
   data() {
     return {
-      search: '',
+      searchName:'',
+      searchResolving:'',
+      searchState:'',
       edit:0,
+      isAll:true,
+      state: [
+        {
+          label: "使用中",
+          value: "2",
+        },
+        {
+          label: "未使用",
+          value: "1",
+        },
+        {
+          label: "已失效",
+          value: "0",
+        },
+      ],
+      resolving: [
+        {
+          value: "1920*1080(横)",
+        },
+        {
+          value: "1080*1920(竖)",
+        },
+        {
+          value: "3840*2160(横)",
+        },
+        {
+          value: "2160*3840(竖)",
+        },
+      ],
       currentPage4: 1,
       pageSize4: 10,
       total: 0,
@@ -140,11 +210,13 @@ export default {
   },
   methods: {
     load(){
-      request.get("/user", {
+      request.get("/program", {
         params:{
           pageNum:this.currentPage4,
           pageSize:this.pageSize4,
-          search:this.search
+          name:this.searchName,
+          resolving:this.searchResolving,
+          state:this.searchState,
         }
       }).then(res => {
         console.log(res)
@@ -154,7 +226,7 @@ export default {
     },
     save(){
       if(this.edit){
-        request.put("/user",this.form).then(res => {
+        request.put("/program",this.form).then(res => {
           console.log(res)
           if(res.code === 200){
             this.$message({
@@ -173,7 +245,7 @@ export default {
         })
       }
       else{
-        request.post("/user",this.form).then(res => {
+        request.post("/program",this.form).then(res => {
           console.log(res)
           if(res.code === 200){
             this.$message({
@@ -197,18 +269,32 @@ export default {
       this.dialogVisible = true
       this.edit = 1
     },
+    reset() {
+      this.searchName = "";
+      this.searchResolving = "";
+      this.searchState = "";
+    },
     add(){
       this.dialogVisible = true
       this.form = {}
       this.form.userState = 0
       this.form.userType = 0
     },
-    handleSelectionChange(){
-
+    handleSelectionChange(selections){
+      this.checkList = selections
+      if(Object.keys(selections).length === 0){
+        this.isAll = true
+      }else {
+        this.isAll = false
+      }
+      console.log(this.checkList)
     },
-    isAll(){
-
-    },
+    // isAll(){
+    //   if(this.checkList!==null){
+    //     return true;
+    //   }
+    //   return false;
+    // },
     Delete(){
 
     },
