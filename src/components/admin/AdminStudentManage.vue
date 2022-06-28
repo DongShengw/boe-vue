@@ -35,7 +35,7 @@
 
       <el-table-column label="操作">
         <template #default="scope">
-          <el-button @click="handleEdit(scope.row)">详情</el-button>
+          <el-button @click="details">详情</el-button>
           <el-button @click="handleEdit(scope.row)">控制</el-button>
           <el-button @click="handleEdit(scope.row)">刷新</el-button>
           <el-button @click="edit">编辑</el-button>          
@@ -78,6 +78,23 @@
       </span>
         </template>
       </el-dialog>
+
+      <el-dialog v-model="dv2" title="编辑设备" width="30%">
+        <el-form :model="form" label-width="120px">
+          <el-form-item label="设备名称">
+            <el-input v-model="form.sex" style="width:80%"/>
+          </el-form-item>
+          <el-form-item label="所属分组">
+            <el-input v-model="form.email" style="width:80%"/>
+          </el-form-item>
+        </el-form>
+        <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="dv2 = false">取消</el-button>
+        <el-button type="primary" @click="save">确认</el-button>
+      </span>
+        </template>
+      </el-dialog>
     </div>
   </div>
 </template>
@@ -98,6 +115,7 @@ export default {
       pageSize4: 10,
       total: 0,
       dv1:false,
+      dv2:false,
       form:{},
       tableData: []
     }
@@ -122,7 +140,10 @@ export default {
     edit() {
       this.dv1 = true
       this.form = {}
-
+    },
+    details() {
+      this.dv2 = true
+      this.form = {}
     },
     save(){
       if(this.form.studentId){
@@ -134,7 +155,7 @@ export default {
               message:"更新成功"
             })
           }else{
-            this.$message({
+            this.$message({ 
               type:"error",
               message:res.msg
             })
