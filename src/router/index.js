@@ -38,11 +38,11 @@ const routes = [
         }
       },
       {
-        path: '/teacherManage',
-        name: 'teacherManage',
-        component: () => import("@/components/admin/TeacherManage"),
+        path: '/programList',
+        name: 'programList',
+        component: () => import("@/components/admin/programList"),
         meta:{
-          title:'Stars教师管理'
+          title:'节目列表'
         }
 
       },
