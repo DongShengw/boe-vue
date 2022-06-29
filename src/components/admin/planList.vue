@@ -95,8 +95,8 @@
 
       <!--弹窗-->
       <!--            计划详情-->
-      <el-dialog v-model="pl1" title="" width="30%">
-        <el-form :model="form" label-width="120px">
+      <el-dialog v-model="pl1" title="" width="80%">
+        <el-form :model="form" label-width="800px">
           <el-tabs type="border-card">
             <el-tab-pane label="计划详情">
               <template>
@@ -113,6 +113,7 @@
                 </el-descriptions>
               </template>
             </el-tab-pane>
+
             <el-tab-pane label="设备详情">
               <el-table
                   :data="tableData"
@@ -150,7 +151,7 @@
         </el-form>
         <template #footer>
                     <span class="dialog-footer">
-                        <el-button @click="dv2 = false">返回</el-button>
+                        <el-button @click="pl1 = false">返回</el-button>
                     </span>
         </template>
       </el-dialog>
@@ -190,10 +191,6 @@
             </el-col>
           </el-form-item>
 
-          <!--                    <el-form-item>-->
-          <!--                        <el-button type="primary" @click="onSubmit">Create</el-button>-->
-          <!--                        <el-button>Cancel</el-button>-->
-          <!--                    </el-form-item>-->
         </el-form>
         <template #footer>
                     <span class="dialog-footer">
@@ -266,7 +263,8 @@ export default {
       dialogVisible:false,
       checkList:[],
       form:{},
-      tableData: []
+      tableData: [],
+      pl1:false,
     }
   },
   created() {
@@ -328,6 +326,10 @@ export default {
       }
 
     },
+    details(row){
+      this.pl1=true;
+      this.form=JSON.parse(JSON.stringify(row));
+    },
     handleEdit(row) {
       this.form = JSON.parse(JSON.stringify(row))
       this.dialogVisible = true
@@ -347,6 +349,7 @@ export default {
       this.form.programAuthor = "yyx"
       // this.form.programAuthor = this.$cookies.get("data").userName
     },
+
     handleSelectionChange(selections){
       this.checkList = selections
       if(Object.keys(selections).length === 0){
@@ -369,7 +372,7 @@ export default {
     },
     handleDelete(id) {
       console.log(id)
-      request.delete("/program/" + id).then(res => {
+      request.delete("/schedule-list/" + id).then(res => {
         console.log(res)
         if(res.code === 200){
           this.$message({
