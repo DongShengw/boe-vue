@@ -11,7 +11,7 @@ const routes = [
   {
     path: '/admin',
     component: AdminLayout,
-    redirect:"/itemList",
+    redirect:"/home",
     children: [
       {
         path: '/adminManage',
@@ -43,6 +43,14 @@ const routes = [
         component: () => import("@/components/admin/programList"),
         meta:{
           title:'节目列表'
+        }
+      },
+      {
+        path: '/noticeList',
+        name: 'noticeList',
+        component: () => import("@/components/admin/noticeList"),
+        meta:{
+          title:'计划列表'
         }
       },
       {

@@ -26,7 +26,7 @@
           <span>节目制作和发布</span>
         </template>
         <el-menu-item index="programList">发布节目</el-menu-item>
-        <el-menu-item index="adminSetPaper">发布公告</el-menu-item>
+        <el-menu-item index="noticeList">发布公告</el-menu-item>
 
         <!--        <el-menu-item index="addQuestions">添加题目</el-menu-item>-->
       </el-sub-menu>
