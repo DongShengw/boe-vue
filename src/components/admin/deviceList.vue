@@ -198,7 +198,7 @@
               <br>
               <span>当前计划：{{form.deviceSchedule}}</span><br>
               <span>设备运行时长：1 天 30 分钟</span><br>
-              <span>最后心跳时间: 2022-06-27 16:01:20</span><br>  
+              <span>最后心跳时间: 2022-06-27 16:01:20</span><br>
             </el-tab-pane>
           </el-tabs>
         </el-form>
@@ -296,7 +296,7 @@ export default {
   },
   methods: {
     load() {
-      request 
+      request
         .get("/device", {
           params: {
             pageNum: this.currentPage4,
@@ -350,6 +350,7 @@ export default {
       this.searchState = "";
       this.searchSchedule = "";
       this.searchSystem = "";
+      this.load()
     },
     details(row) {
       this.dv2 = true;
