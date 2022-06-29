@@ -1,6 +1,7 @@
 <template>
   <div v-wechat-title="$route.meta.title" class="home" style="padding: 10px">
-    <div style="margin: 10px 0">
+    <!--      1、  -->
+    <div style="margin: 20px 0 ; margin-left: 20px">
       <span>计划名称：</span>
       <el-input
           v-model="planName"
@@ -16,7 +17,7 @@
           clearable
       >
         <el-option
-            v-for="item in plan"
+            v-for="item in state"
             :key="item.value"
             :label="item.label"
             :value="item.value"
@@ -34,7 +35,7 @@
       >
     </div>
     <!--        新建计划、批量删除-->
-    <div style="margin: 10px 0">
+    <div style="margin: 10px 0;">
       <el-button type="primary" @click="add">新增计划</el-button>
       <el-button type="primary" :disabled="isAll" @click="Delete">批量删除</el-button>
     </div>
@@ -55,13 +56,13 @@
         </template>
       </el-table-column>
       <el-table-column prop="listName" label="计划名称" sortable />
-      <el-table-column prop="listState" label="计划状态" />
-      <el-table-column prop="listMode" label="播放模式" />
-      <el-table-column prop="listTime" label="播放日期" />
-      <el-table-column prop="listAuthor" label="作者" />
-      <el-table-column prop="listConfirm" label="审核人" />
-      <el-table-column prop="listNewtime" label="更新时间" />
-      <el-table-column label="操作" width="400">
+      <el-table-column prop="planStates" label="计划状态" />
+      <el-table-column prop="planMode" label="播放模式" />
+      <el-table-column prop="planTime" label="播放日期" />
+      <el-table-column prop="planAuthor" label="作者" />
+      <el-table-column prop="planConfirm" label="审核人" />
+      <el-table-column prop="planNewtime" label="更新时间" />
+      <el-table-column label="操作" width="350">
         <template #default="scope">
           <el-button @click="details">详情</el-button>
           <el-button @click="handleEdit(scope.row)">修改</el-button>
@@ -225,15 +226,23 @@ export default {
       isAll:true,
       state: [
         {
-          label: "使用中",
-          value: "2",
-        },
-        {
-          label: "未使用",
+          label: "发布中",
           value: "1",
         },
         {
-          label: "已失效",
+          label: "待发布",
+          value: "2",
+        },
+        {
+          label: "播放中",
+          value: "3",
+        },
+        {
+          label: "发布失败",
+          value: "4",
+        },
+        {
+          label: "已结束",
           value: "0",
         },
       ],
