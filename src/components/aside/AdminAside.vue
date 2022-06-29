@@ -7,7 +7,7 @@
         background-color="#545c64"
         text-color="#fff"
         class="el-menu-vertical-demo">
-      <el-menu-item index="1">
+      <el-menu-item index="home">
         <template #title>
           <el-icon><notebook /></el-icon>
           <span>首页概览</span>

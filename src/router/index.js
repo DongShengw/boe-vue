@@ -44,8 +44,14 @@ const routes = [
         meta:{
           title:'节目列表'
         }
-
-
+      },
+      {
+        path: '/home',
+        name: 'home',
+        component: () => import("@/components/admin/home"),
+        meta:{
+          title:'首页概览'
+        }
       },
       {
         path: '/planList',
