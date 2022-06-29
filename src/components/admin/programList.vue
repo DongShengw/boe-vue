@@ -71,18 +71,20 @@
       <el-table-column prop="programSize" label="节目大小"/>
       <el-table-column prop="programState" label="节目状态">
          <template #default="scope">
-            <el-tag v-if="scope.row.userState==1" type="success">在线</el-tag>
-            <el-tag v-if="scope.row.userState==0" type="danger">离线</el-tag>
+           <el-tag v-if="scope.row.programState==2" type="success">使用中</el-tag>
+           <el-tag v-if="scope.row.programState==1" type="info">未使用</el-tag>
+           <el-tag v-if="scope.row.programState==0" type="danger">已失效</el-tag>
          </template>
       </el-table-column>
       <el-table-column prop="programAuthor" label="作者"/>
       <el-table-column prop="programUpdate" label="更新时间"/>
 
 
-      <el-table-column label="操作">
+      <el-table-column label="操作" width="250">
         <template #default="scope">
-          <el-button @click="handleEdit(scope.row)">编辑</el-button>
-          <el-popconfirm title="确认删除?" @confirm="handleDelete(scope.row.userId)">
+          <el-button type="success" @click="handlePub(scope.row)">发布</el-button>
+          <el-button type="primary" @click="handleEdit(scope.row)">编辑</el-button>
+          <el-popconfirm title="确认删除?" @confirm="handleDelete(scope.row.programId)">
             <template #reference>
               <el-button type="danger">删除</el-button>
             </template>
@@ -107,37 +109,28 @@
       <!--弹窗-->
       <el-dialog v-model="dialogVisible" title="提示" width="30%">
         <el-form :model="form" label-width="120px">
-          <!--          <el-form-item label="管理员ID">-->
-          <!--            <el-input v-model="form.adminId" style="width:80%"/>-->
-          <!--          </el-form-item>-->
           <el-form-item label="节目名称" disabled="true">
             <el-input v-model="form.programName" style="width:80%"/>
           </el-form-item>
           <el-form-item label="分辨率">
-            <el-select v-model="form.resolvingPower" placeholder="">
-              <el-option label="浙大城市学院" value="浙大城市学院" />
-              <el-option label="浙江大学" value="浙江大学" />
-            </el-select>          </el-form-item>
-          <el-form-item label="所属角色">
-            <el-select v-model="form.userRole" placeholder="">
-              <el-option label="学生" value="学生" />
-              <el-option label="老师" value="老师" />
+            <el-select
+                v-model="form.resolvingPower"
+                placeholder="分辨率"
+            >
+              <el-option
+                  v-for="item in resolving"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+              />
             </el-select>
           </el-form-item>
-          <el-form-item label="姓名">
-            <el-input v-model="form.userRname" style="width:80%"/>
+          <el-form-item label="节目时长">
+            <el-select v-model="form.programTime" placeholder="">
+              <el-option label="5s" value="5s" />
+              <el-option label="10s" value="10s" />
+            </el-select>
           </el-form-item>
-          <el-form-item label="邮箱">
-            <el-input v-model="form.userEmail" style="width:80%"/>
-          </el-form-item>
-          <!--          <el-form-item label="用户类型">-->
-          <!--            <el-select v-model="form.userType" placeholder="">-->
-          <!--              <el-option label="学生" value="shanghai" />-->
-          <!--              <el-option label="老师" value="beijing" />-->
-          <!--              <el-option label="管理员" value="beijing" />-->
-          <!--            </el-select>-->
-          <!--          </el-form-item>-->
-
         </el-form>
         <template #footer>
       <span class="dialog-footer">
@@ -273,12 +266,15 @@ export default {
       this.searchName = "";
       this.searchResolving = "";
       this.searchState = "";
+      this.load()
     },
     add(){
       this.dialogVisible = true
       this.form = {}
-      this.form.userState = 0
-      this.form.userType = 0
+      this.form.programState = 1
+      this.form.programSize = "50.0kb"
+      this.form.programAuthor = "yyx"
+      // this.form.programAuthor = this.$cookies.get("data").userName
     },
     handleSelectionChange(selections){
       this.checkList = selections
@@ -289,21 +285,20 @@ export default {
       }
       console.log(this.checkList)
     },
-    // isAll(){
-    //   if(this.checkList!==null){
-    //     return true;
-    //   }
-    //   return false;
-    // },
     Delete(){
-
+      this.checkList.forEach(item => (
+          this.handleDelete(item.programId)
+      ))
     },
     pub(){
 
     },
+    handlePub(id){
+
+    },
     handleDelete(id) {
       console.log(id)
-      request.delete("/user/" + id).then(res => {
+      request.delete("/program/" + id).then(res => {
         console.log(res)
         if(res.code === 200){
           this.$message({
