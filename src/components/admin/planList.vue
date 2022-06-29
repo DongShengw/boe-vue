@@ -11,7 +11,7 @@
       ></el-input>
       <span style="margin-left: 70px">计划状态：</span>
       <el-select
-          v-model="planStates"
+          v-model="planState"
           placeholder="请选择"
           style="width: 20%; margin-right: 20px"
           clearable
@@ -31,7 +31,7 @@
           type="primary"
           style="margin-left: 5px; margin-right: 20px"
           @click="load"
-      >查询</el-button
+      >搜索</el-button
       >
     </div>
     <!--        新建计划、批量删除-->
@@ -99,7 +99,7 @@
         <el-form :model="form" label-width="800px">
           <el-tabs type="border-card">
             <el-tab-pane label="计划详情">
-              <template>
+
                 <el-descriptions title="">
                   <el-descriptions-item label="计划名称">plan0</el-descriptions-item>
                   <el-descriptions-item label="播放日期">2022-06-29</el-descriptions-item>
@@ -111,7 +111,7 @@
                     循环时间段:8:00-20:00
                   </el-descriptions-item>
                 </el-descriptions>
-              </template>
+
             </el-tab-pane>
 
             <el-tab-pane label="设备详情">
@@ -216,46 +216,47 @@ export default {
   },
   data() {
     return {
-      searchName:'',
-      searchResolving:'',
-      searchState:'',
+      planName:'',
+      planState:'',
       edit:0,
       isAll:true,
       state: [
         {
-          label: "发布中",
-          value: "1",
+          value:"所有状态",
+          label:"所有状态"
         },
         {
-          label: "待发布",
-          value: "2",
+          value:"待发布",
+          label:"待发布"
         },
         {
-          label: "播放中",
-          value: "3",
+          value:"发布中",
+          label:"发布中"
         },
         {
-          label: "发布失败",
-          value: "4",
+          value:"发布成功",
+          label:"发布成功"
         },
         {
-          label: "已结束",
-          value: "0",
-        },
-      ],
-      resolving: [
-        {
-          value: "1920*1080(横)",
+          value:"部分成功",
+          label:"部分成功"
         },
         {
-          value: "1080*1920(竖)",
+          value:"发布失败",
+          label:"发布失败"
         },
         {
-          value: "3840*2160(横)",
+          value:"已结束",
+          label:"已结束"
         },
         {
-          value: "2160*3840(竖)",
+          value:"已失效",
+          label:"已失效"
         },
+        {
+          value:"审核中",
+          label:"审核中"
+        }
       ],
       currentPage4: 1,
       pageSize4: 10,
@@ -276,9 +277,8 @@ export default {
         params:{
           pageNum:this.currentPage4,
           pageSize:this.pageSize4,
-          name:this.searchName,
-          resolving:this.searchResolving,
-          state:this.searchState,
+          name:this.planName,
+          state:this.planState,
         }
       }).then(res => {
         console.log(res)
@@ -328,7 +328,7 @@ export default {
     },
     details(row){
       this.pl1=true;
-      this.form=JSON.parse(JSON.stringify(row));
+      // this.form=JSON.parse(JSON.stringify());
     },
     handleEdit(row) {
       this.form = JSON.parse(JSON.stringify(row))
@@ -336,9 +336,8 @@ export default {
       this.edit = 1
     },
     reset() {
-      this.searchName = "";
-      this.searchResolving = "";
-      this.searchState = "";
+      this.planName = "";
+      this.planState = "";
       this.load()
     },
     add(){
