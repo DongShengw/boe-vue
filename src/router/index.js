@@ -44,7 +44,6 @@ const routes = [
         meta:{
           title:'节目列表'
         }
-<<<<<<< HEAD
       },
       {
         path: '/home',
@@ -53,10 +52,6 @@ const routes = [
         meta:{
           title:'首页概览'
         }
-=======
-
-
->>>>>>> 1392754d761a2142d1997c7518ca53c7e020d28b
       },
       {
         path: '/planList',
