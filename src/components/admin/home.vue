@@ -147,6 +147,37 @@
         </el-card>
       </div>
     </div>
+    <div class="bottom">
+      <div class="bottomLeft">
+        <el-card class="box-card2">
+          <template #header>
+            <div class="card-header">
+              <span>计划审核提醒</span>
+            </div>
+          </template>
+          <div class="card-body">
+            <el-table :data="tableData" style="width: 100%">
+              <el-table-column prop="date" label="序号" width="180" />
+              <el-table-column prop="name" label="计划名称" width="180" />
+              <el-table-column prop="address" label="计划状态" />
+              <el-table-column prop="address" label="提交时间" />
+              <el-table-column prop="address" label="提交人" />
+              <el-table-column prop="address" label="操作" />
+            </el-table>
+          </div>
+        </el-card>
+      </div>
+      <div class="bottomRight">
+        <el-card class="box-card3">
+          <template #header>
+            <div class="card-header">
+              <span>事件记录</span>
+            </div>
+          </template>
+          <div class="card-body"></div>
+        </el-card>
+      </div>
+    </div>
   </div>
 </template>
 <script>
@@ -172,8 +203,31 @@ export default {
         },
       ],
       xData: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"], //横坐标
-      yData: [2, 4, 8, 5, 7, 8, 10], //数据
-      myChartStyle: { float: "left", width: "300%", height: "300px" }, //图表样式
+      yData: [2, 3, 1, 1, 2, 3, 4], //数据
+      myChartStyle: { float: "left", width: "300%", height: "230px" }, //图表样式
+
+      tableData: [
+        {
+          date: "2016-05-03",
+          name: "Tom",
+          address: "No. 189, Grove St, Los Angeles",
+        },
+        {
+          date: "2016-05-02",
+          name: "Tom",
+          address: "No. 189, Grove St, Los Angeles",
+        },
+        {
+          date: "2016-05-04",
+          name: "Tom",
+          address: "No. 189, Grove St, Los Angeles",
+        },
+        {
+          date: "2016-05-01",
+          name: "Tom",
+          address: "No. 189, Grove St, Los Angeles",
+        },
+      ],
     };
   },
   mounted() {
@@ -214,9 +268,9 @@ export default {
           {
             type: "bar", //形状为柱状图
             data: this.yData,
-            itemStyle:{
-              color: '#1890ff',
-            }
+            itemStyle: {
+              color: "#1890ff",
+            },
           },
         ],
       };
@@ -266,9 +320,18 @@ export default {
   }
 }
 .mid {
+  margin-top: 15px;
   display: flex;
+  .midRight {
+    .echart {
+      margin-top: -50px;
+    }
+  }
 }
-
+.bottom {
+  display: flex;
+  margin-top: 30px;
+}
 //设备状态表
 .percentage-value {
   display: block;
@@ -317,6 +380,17 @@ export default {
   width: 400px;
 }
 .box-card1 {
+  height: 240px;
+  margin-left: 30px;
+  width: 540px;
+}
+.box-card2 {
+  height: 300px;
+  margin-left: 30px;
+  width: 830px;
+}
+.box-card3 {
+  height: 300px;
   margin-left: 30px;
   width: 540px;
 }
