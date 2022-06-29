@@ -1,21 +1,21 @@
 <template>
   <div class="body">
-    <div class="topChart">
-      <div class="top">
+    <div class="top">
+      <div class="topChart">
         <img src="@/assets/img/equipment.png" />
         <div class="tr">
           <p>设备数量</p>
           <span>{{ count1 }}</span>
         </div>
       </div>
-      <div class="top">
+      <div class="topChart">
         <img src="@/assets/img/programme.png" />
         <div class="tr">
           <p>节目数量</p>
           <span>{{ count2 }}</span>
         </div>
       </div>
-      <div class="top">
+      <div class="topChart">
         <img src="@/assets/img/plan.png" />
         <div class="tr">
           <p>计划数量</p>
@@ -32,13 +32,17 @@
             </div>
           </template>
           <div class="card-body">
-            <div class="demo-progress">
+            <div class="demo-progress" style="margin-left: 20px">
               <el-progress type="circle" :percentage="100">
                 <span class="percentage-value">{{ count1 }}</span>
                 <span class="percentage-label">台</span>
               </el-progress>
             </div>
-            <div class="cardRight" @click="$router.push('/deviceList')">
+            <div
+              class="cardRight"
+              @click="$router.push('/deviceList')"
+              style="margin-left: 55px"
+            >
               <ul>
                 <li>
                   <span
@@ -46,7 +50,7 @@
                     style="background-color: rgb(120, 128, 141)"
                   ></span
                   ><span>离线</span>
-                  <span style="margin-left:20px">{{countLx}}台</span>
+                  <span style="margin-left: 20px">{{ countLx }}台</span>
                 </li>
                 <li>
                   <span
@@ -54,7 +58,7 @@
                     style="background-color: rgb(78, 203, 115)"
                   ></span
                   ><span>播放</span>
-                  <span style="margin-left:20px">{{countBf}}台</span>
+                  <span style="margin-left: 20px">{{ countBf }}台</span>
                 </li>
                 <li>
                   <span
@@ -62,7 +66,7 @@
                     style="background-color: rgb(251, 212, 55)"
                   ></span
                   ><span>空闲</span>
-                  <span style="margin-left:20px">{{countKx}}台</span>
+                  <span style="margin-left: 20px">{{ countKx }}台</span>
                 </li>
               </ul>
             </div>
@@ -77,40 +81,68 @@
             </div>
           </template>
           <div class="card-body">
-            <div class="demo-progress">
+            <div class="demo-progress" style="margin-left: 20px">
               <el-progress type="circle" :percentage="100" color="#e2c244">
                 <span class="percentage-value">5.03</span>
                 <span class="percentage-label">MB</span>
               </el-progress>
             </div>
-            <div class="cardRight" @click="$router.push('/deviceList')">
+            <div
+              class="cardRight"
+              @click="$router.push('/deviceList')"
+              style="margin-left: 55px"
+            >
               <ul>
                 <li>
                   <span
                     class="cr"
-                    style="background-color: rgb(251, 212, 55);"
+                    style="background-color: rgb(251, 212, 55)"
                   ></span
                   ><span>图片</span>
-                  <span style="margin-left:20px">5.03MB</span>
+                  <span style="margin-left: 20px">5.03MB</span>
                 </li>
                 <li>
                   <span
                     class="cr"
-                    style="background-color: rgb(24, 144, 255);"
+                    style="background-color: rgb(24, 144, 255)"
                   ></span
                   ><span>视频</span>
-                  <span style="margin-left:20px">0B</span>
+                  <span style="margin-left: 20px">0B</span>
                 </li>
                 <li>
                   <span
                     class="cr"
-                    style="background-color: rgb(151, 95, 229);"
+                    style="background-color: rgb(151, 95, 229)"
                   ></span
                   ><span>音频</span>
-                  <span style="margin-left:20px">0B</span>
+                  <span style="margin-left: 20px">0B</span>
                 </li>
               </ul>
             </div>
+          </div>
+        </el-card>
+      </div>
+      <div class="midRight">
+        <el-card class="box-card1">
+          <template #header>
+            <div class="card-header">
+              <span>设备分布</span>
+              <el-select
+                v-model="selection"
+                placeholder="设备分布"
+                style="width: 30%"
+                clearable
+              >
+                <el-option
+                  v-for="item in select"
+                  :key="item.value"
+                  :value="item.value"
+                />
+              </el-select>
+            </div>
+          </template>
+          <div class="card-body" @click="$router.push('/deviceList')">
+            <div class="echart" id="mychart" :style="myChartStyle"></div>
           </div>
         </el-card>
       </div>
@@ -119,6 +151,7 @@
 </template>
 <script>
 import request from "@/utils/request";
+import * as echarts from "echarts";
 
 export default {
   data() {
@@ -129,7 +162,22 @@ export default {
       countLx: 0,
       countBf: 0,
       countKx: 0,
+      selection: "分组",
+      select: [
+        {
+          value: "分组",
+        },
+        {
+          value: "机构",
+        },
+      ],
+      xData: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"], //横坐标
+      yData: [2, 4, 8, 5, 7, 8, 10], //数据
+      myChartStyle: { float: "left", width: "300%", height: "300px" }, //图表样式
     };
+  },
+  mounted() {
+    this.initEcharts();
   },
   created() {
     this.load();
@@ -155,19 +203,43 @@ export default {
         this.countBf = res.data[2];
       });
     },
+    initEcharts() {
+      // 基本柱状图
+      const option = {
+        xAxis: {
+          data: this.xData,
+        },
+        yAxis: {},
+        series: [
+          {
+            type: "bar", //形状为柱状图
+            data: this.yData,
+            itemStyle:{
+              color: '#1890ff',
+            }
+          },
+        ],
+      };
+      const myChart = echarts.init(document.getElementById("mychart"));
+      myChart.setOption(option);
+      //随着屏幕大小调节图表
+      window.addEventListener("resize", () => {
+        myChart.resize();
+      });
+    },
   },
 };
 </script>
 <style lang="scss" scoped>
-.body{
+.body {
   background-color: rgb(248, 248, 248);
 }
-.topChart {
+.top {
   display: flex;
   flex-wrap: wrap;
   width: 100%;
   height: 130px;
-  .top {
+  .topChart {
     display: flex;
     flex-wrap: wrap;
     margin-top: 30px;
@@ -193,7 +265,7 @@ export default {
     }
   }
 }
-.mid{
+.mid {
   display: flex;
 }
 
@@ -201,12 +273,12 @@ export default {
 .percentage-value {
   display: block;
   margin-top: 10px;
-  font-size: 28px;
+  font-size: 32px;
 }
 .percentage-label {
   display: block;
   margin-top: 10px;
-  font-size: 12px;
+  font-size: 18px;
 }
 //卡片
 .card-header {
@@ -224,24 +296,28 @@ export default {
 .item {
   margin-bottom: 18px;
 }
-.cardRight{
+.cardRight {
   margin-left: 30px;
-  li{
+  li {
     list-style-type: none;
     margin-top: 15px;
   }
   .cr {
-  position: relative;
-  top: -1px;
-  display: inline-block;
-  width: 8px;
-  height: 8px;
-  margin-right: 8px;
-  border-radius: 8px;
-}
+    position: relative;
+    top: -1px;
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    margin-right: 8px;
+    border-radius: 8px;
+  }
 }
 .box-card {
   margin-left: 30px;
-  width: 370px;
+  width: 400px;
+}
+.box-card1 {
+  margin-left: 30px;
+  width: 540px;
 }
 </style>
