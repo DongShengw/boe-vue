@@ -45,7 +45,16 @@ const routes = [
           title:'节目列表'
         }
 
+
       },
+      {
+        path: '/planList',
+        name: 'planList',
+        component: () => import("@/components/admin/planList"),
+        meta:{
+          title:'计划列表'
+        }
+      }
     ]
   },
 
