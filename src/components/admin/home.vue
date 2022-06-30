@@ -157,11 +157,21 @@
             </div>
           </template>
           <div class="card-body">
-            <el-table :data="tableData" max-height="200" style="width: 100%;">
+            <el-table :data="tableData" max-height="200" style="width: 100%">
               <el-table-column fixed prop="id" label="序号" width="100" />
               <el-table-column prop="name" label="计划名称" width="180" />
-              <el-table-column prop="state" label="计划状态" width="150"/>
-              <el-table-column prop="time" label="提交时间" width="230"/>
+              <el-table-column prop="state" label="计划状态" width="150">
+                <template #default="scope">
+                  <el-tag v-if="scope.row.state == 1" type="success"
+                    >空闲</el-tag
+                  >
+                  <el-tag v-if="scope.row.state == 2">播放</el-tag>
+                  <el-tag v-if="scope.row.state == 0" type="danger"
+                    >离线</el-tag
+                  >
+                </template>
+              </el-table-column>
+              <el-table-column prop="time" label="提交时间" width="230" />
               <el-table-column prop="person" label="提交人" />
             </el-table>
           </div>
@@ -229,7 +239,7 @@ export default {
           state: "No. 189, Grove St, Los Angeles",
           time: "2020/12/12",
           person: "yyx",
-        }
+        },
       ],
       activities: [
         {
@@ -303,12 +313,12 @@ export default {
         console.log(res);
         this.tableData = [];
         for (let i = 0; i < res.data.length; i++) {
-          var obj ={}
-          obj.id=res.data[i].listId;
-          obj.name=res.data[i].listName;
-          obj.state=res.data[i].listState;
-          obj.time=res.data[i].listUpdate;
-          obj.person=res.data[i].listAuthor;
+          var obj = {};
+          obj.id = res.data[i].listId;
+          obj.name = res.data[i].listName;
+          obj.state = res.data[i].listState;
+          obj.time = res.data[i].listUpdate;
+          obj.person = res.data[i].listAuthor;
           this.tableData.push(obj);
         }
       });
@@ -348,7 +358,7 @@ export default {
         xAxis: {
           data: this.xData,
         },
-        yAxis: { minInterval:1 },
+        yAxis: { minInterval: 1 },
         series: [
           {
             type: "bar", //形状为柱状图
