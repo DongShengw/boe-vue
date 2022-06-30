@@ -162,13 +162,22 @@
               <el-table-column prop="name" label="计划名称" width="180" />
               <el-table-column prop="state" label="计划状态" width="150">
                 <template #default="scope">
-                  <el-tag v-if="scope.row.state == 1" type="success"
-                    >空闲</el-tag
+                  <el-tag v-if="scope.row.state == 5" type="danger"
+                    >待发布</el-tag
                   >
-                  <el-tag v-if="scope.row.state == 2">播放</el-tag>
-                  <el-tag v-if="scope.row.state == 0" type="danger"
-                    >离线</el-tag
+                  <el-tag v-if="scope.row.state == 4" type="warning"
+                    >发布中</el-tag
                   >
+                  <el-tag v-if="scope.row.state == 3" type="success"
+                    >发布成功</el-tag
+                  >
+                  <el-tag v-if="scope.row.state == 2" type="danger"
+                    >发布失败</el-tag
+                  >
+                  <el-tag v-if="scope.row.state == 1" type="info"
+                    >已结束</el-tag
+                  >
+                  <el-tag v-if="scope.row.state == 0">审核中</el-tag>
                 </template>
               </el-table-column>
               <el-table-column prop="time" label="提交时间" width="230" />
