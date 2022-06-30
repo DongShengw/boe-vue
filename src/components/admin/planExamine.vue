@@ -17,7 +17,6 @@
                     @click="load"
             >搜索</el-button>
         </div>
-<!--表单-->
         <el-table
                 :data="tableData"
                 stripe

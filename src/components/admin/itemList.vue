@@ -25,72 +25,65 @@
     </div>
     <div style="width: auto;;margin-top: 20px">
       <el-card style="height:75vh">
-        <el-upload action="#" list-type="picture-card" :auto-upload="false" >
+        <el-upload
+            v-model:file-list="fileList"
+            action="http://localhost:8081/img/UploadPic"
+            list-type="picture-card"
+            :on-preview="handlePictureCardPreview"
+            :on-remove="handleRemove"
+        >
           <el-icon><Plus /></el-icon>
-
-          <template #file="{ file }">
-            <div>
-              <img class="el-upload-list__item-thumbnail" :src="file.url" alt="" />
-              <span class="el-upload-list__item-actions">
-          <span
-              class="el-upload-list__item-preview"
-              @click="handlePictureCardPreview(file)"
-          >
-            <el-icon><zoom-in /></el-icon>
-          </span>
-          <span
-              v-if="!disabled"
-              class="el-upload-list__item-delete"
-              @click="handleDownload(file)"
-          >
-            <el-icon><Download /></el-icon>
-          </span>
-          <span
-              v-if="!disabled"
-              class="el-upload-list__item-delete"
-              @click="handleRemove(file)"
-          >
-            <el-icon><Delete /></el-icon>
-          </span>
-        </span>
-            </div>
-          </template>
         </el-upload>
+
       </el-card>
     </div>
   </div>
 
-  <el-dialog v-model="dialogVisible">
-    <img w-full :src="dialogImageUrl" alt="Preview Image" />
+  <el-dialog v-model="dialogVisible"  style="height: auto;width: 700px">
+    <img style="width: 800px; height: auto" fit="contain" :src="dialogImageUrl" alt="Preview Image" />
   </el-dialog>
 </template>
 
 <script>
-import { ref } from 'vue';
+
+import request from "@/utils/request";
+import { ArrowLeft } from '@element-plus/icons-vue'
+import {ref} from "@vue/reactivity";
 export default {
-  name: "itemList",
-  data(){
-    return{
-      dialogImageUrl:ref(''),
-      dialogVisible:ref(false),
-      disabled:ref(false),
+  name: 'programList',
+  components: {
+    ArrowLeft
+  },
+  data() {
+    return {
+      fileList:[],
+      searchName:'',
+      dialogImageUrl:'',
+      dialogVisible:false,
+      disabled:false,
     }
   },
-  method:{
-    handleRemove(file){
-      console.log(file)
+  created() {
+    this.load()
+  },
+  methods: {
+    load(){
+      request.get("/img", {
+        params:{
+          name:this.searchName,
+        }
+      }).then(res => {
+        console.log(res)
+        this.fileList = res.data.records
+      })
     },
-    handlePictureCardPreview(file){
-      this.dialogImageUrl.value = file.url,
-      this.dialogVisible.value = true
+    handlePictureCardPreview(uploadFile){
+      this.dialogImageUrl = uploadFile.url
+      this.dialogVisible = true
     },
-    handleDownload(file){
-      console.log(file)
+    handleRemove(uploadFile){
+
     }
   }
 }
 </script>
-
-<style scoped>
-
-</style>
