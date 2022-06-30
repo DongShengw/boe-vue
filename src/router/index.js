@@ -68,6 +68,14 @@ const routes = [
         meta:{
           title:'计划列表'
         }
+      },
+      {
+        path: '/planExamine',
+        name: 'planExamine',
+        component: () => import("@/components/admin/planExamine"),
+        meta:{
+          title:'计划列表'
+        }
       }
     ]
   },

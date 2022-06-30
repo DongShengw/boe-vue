@@ -36,7 +36,7 @@
           <span>计划管理</span>
         </template>
         <el-menu-item index="planList">计划列表</el-menu-item>
-        <el-menu-item index="adminScorePart">计划审核</el-menu-item>
+        <el-menu-item index="planExamine">计划审核</el-menu-item>
       </el-sub-menu>
       <el-sub-menu index="5">
         <template #title>
