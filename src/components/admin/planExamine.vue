@@ -144,7 +144,7 @@
                 totalD:0,
                 dialogVisible:false,
                 //aaa
-                pl:false,
+                pl1:false,
                 checkList:[],
                 form:{},
                 tableData: [],
