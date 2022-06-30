@@ -179,7 +179,7 @@ export default {
         params:{
           pageNum:this.currentPage4,
           pageSize:this.pageSize4,
-          state:this.searchState,
+          search:this.searchState,
         }
       }).then(res => {
         console.log(res)
