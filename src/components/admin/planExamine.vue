@@ -143,6 +143,7 @@
                 total: 0,
                 totalD:0,
                 dialogVisible:false,
+                //aaa
                 pl:false,
                 checkList:[],
                 form:{},
