@@ -56,19 +56,28 @@
         </template>
       </el-table-column>
       <el-table-column prop="listName" label="计划名称" sortable />
-      <el-table-column prop="planStates" label="计划状态" />
-      <el-table-column prop="planMode" label="播放模式" />
-      <el-table-column prop="planTime" label="播放日期" />
-      <el-table-column prop="planAuthor" label="作者" />
-      <el-table-column prop="planConfirm" label="审核人" />
-      <el-table-column prop="planNewtime" label="更新时间" />
+      <el-table-column prop="listState" label="计划状态" >
+        <template #default="scope">
+          <el-tag v-if="scope.row.listState==4" type="danger">待发布</el-tag>
+          <el-tag v-if="scope.row.listState==4" type="warning">发布中</el-tag>
+          <el-tag v-if="scope.row.listState==3" type="success">发布成功</el-tag>
+          <el-tag v-if="scope.row.listState==2" type="danger">发布失败</el-tag>
+          <el-tag v-if="scope.row.listState==1" type="info">已结束</el-tag>
+          <el-tag v-if="scope.row.listState==0" >审核中</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column prop="playPattern" label="播放模式" />
+      <el-table-column prop="playTime" label="播放日期" />
+      <el-table-column prop="listAuthor" label="作者" />
+      <el-table-column prop="listReviewer" label="审核人" />
+      <el-table-column prop="listUpdate" label="更新时间" />
       <el-table-column label="操作" width="350">
         <template #default="scope">
           <el-button @click="details">详情</el-button>
           <el-button @click="handleEdit(scope.row)">修改</el-button>
           <el-popconfirm
               title="确认删除?"
-              @confirm="handleDelete(scope.row.deviceId)"
+              @confirm="handleDelete(scope.row.listId)"
           >
             <template #reference>
               <el-button type="danger">删除</el-button>
@@ -116,7 +125,7 @@
 
             <el-tab-pane label="设备详情">
               <el-table
-                  :data="tableData"
+                  :data="deviceData"
                   stripe
                   style="width: 100%; text-align: center"
                   border
@@ -143,7 +152,7 @@
                   :disabled="disabled"
                   :background="background"
                   layout="total, sizes, prev, pager, next, jumper"
-                  :total="total"
+                  :total="totalD"
                   @size-change="handleSizeChange"
                   @current-change="handleCurrentChange"/>
             </el-tab-pane>
@@ -160,11 +169,11 @@
       <el-dialog v-model="dialogVisible" title="新建计划" width="30%">
         <el-form :model="form" label-width="120px">
           <el-form-item label="计划名称">
-            <el-input v-model="form.planName" />
+            <el-input v-model="form.listName" />
           </el-form-item>
 
           <el-form-item label="播放模式">
-            <el-radio-group v-model="form.planMode">
+            <el-radio-group v-model="form.playPattern">
               <el-radio label="时段播放" />
               <el-radio label="持续播放" />
             </el-radio-group>
@@ -173,7 +182,7 @@
           <el-form-item label="播放时段">
             <el-col :span="11">
               <el-date-picker
-                  v-model="form.planTime"
+                  v-model="form.playTime"
                   type="date"
                   placeholder="Pick a date"
                   style="width: 100%"
@@ -184,7 +193,7 @@
             </el-col>
             <el-col :span="11">
               <el-date-picker
-                  v-model="form.planTime"
+                  v-model="form.playTime"
                   placeholder="Pick a date"
                   style="width: 100%"
               />
@@ -221,50 +230,44 @@ export default {
       edit:0,
       isAll:true,
       state: [
+        // {
+        //   value:"所有状态",
+        //   label:"所有状态"
+        // },
         {
-          value:"所有状态",
-          label:"所有状态"
-        },
-        {
-          value:"待发布",
+          value:"0",
           label:"待发布"
         },
         {
-          value:"发布中",
+          value:"1",
           label:"发布中"
         },
         {
-          value:"发布成功",
+          value:"2",
           label:"发布成功"
         },
         {
-          value:"部分成功",
-          label:"部分成功"
-        },
-        {
-          value:"发布失败",
+          value:"3",
           label:"发布失败"
         },
         {
-          value:"已结束",
+          value:"4",
           label:"已结束"
         },
         {
-          value:"已失效",
-          label:"已失效"
-        },
-        {
-          value:"审核中",
+          value:"5",
           label:"审核中"
         }
       ],
       currentPage4: 1,
       pageSize4: 10,
       total: 0,
+      totalD:0,
       dialogVisible:false,
       checkList:[],
       form:{},
       tableData: [],
+      deviceData:[],
       pl1:false,
     }
   },
@@ -283,6 +286,18 @@ export default {
       }).then(res => {
         console.log(res)
         this.tableData = res.data.records
+        this.total = res.data.total
+      })
+    },
+    loadDevice(){
+      request.get("/device", {
+        params:{
+          pageNum:this.currentPage4,
+          pageSize:this.pageSize4,
+        }
+      }).then(res => {
+        console.log(res)
+        this.deviceData = res.data.records
         this.total = res.data.total
       })
     },
@@ -327,6 +342,7 @@ export default {
 
     },
     details(row){
+      this.loadDevice()
       this.pl1=true;
       // this.form=JSON.parse(JSON.stringify());
     },
@@ -343,10 +359,10 @@ export default {
     add(){
       this.dialogVisible = true
       this.form = {}
-      this.form.programState = 1
-      this.form.programSize = "50.0kb"
-      this.form.programAuthor = "yyx"
-      // this.form.programAuthor = this.$cookies.get("data").userName
+      this.form.listState = 1
+      this.form.listAuthor = "yyx"
+      this.form.listReviewer = "yyx"
+      // this.form.listAuthor = this.$cookies.get("data").userName
     },
 
     handleSelectionChange(selections){
@@ -360,7 +376,7 @@ export default {
     },
     Delete(){
       this.checkList.forEach(item => (
-          this.handleDelete(item.programId)
+          this.handleDelete(item.listId)
       ))
     },
     pub(){
@@ -372,7 +388,7 @@ export default {
     handleDelete(id) {
       console.log(id)
       request.delete("/schedule-list/" + id).then(res => {
-        console.log(res)
+        // console.log(res)
         if(res.code === 200){
           this.$message({
             type:"success",
