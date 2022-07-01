@@ -58,7 +58,7 @@
       <el-table-column prop="listName" label="计划名称" sortable />
       <el-table-column prop="listState" label="计划状态" >
         <template #default="scope">
-          <el-tag v-if="scope.row.listState==4" type="danger">待发布</el-tag>
+          <el-tag v-if="scope.row.listState==5" type="danger">待发布</el-tag>
           <el-tag v-if="scope.row.listState==4" type="warning">发布中</el-tag>
           <el-tag v-if="scope.row.listState==3" type="success">发布成功</el-tag>
           <el-tag v-if="scope.row.listState==2" type="danger">发布失败</el-tag>
@@ -230,32 +230,28 @@ export default {
       edit:0,
       isAll:true,
       state: [
-        // {
-        //   value:"所有状态",
-        //   label:"所有状态"
-        // },
         {
-          value:"0",
+          value:"5",
           label:"待发布"
         },
         {
-          value:"1",
+          value:"4",
           label:"发布中"
         },
         {
-          value:"2",
+          value:"3",
           label:"发布成功"
         },
         {
-          value:"3",
+          value:"2",
           label:"发布失败"
         },
         {
-          value:"4",
+          value:"1",
           label:"已结束"
         },
         {
-          value:"5",
+          value:"0",
           label:"审核中"
         }
       ],

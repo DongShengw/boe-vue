@@ -58,10 +58,10 @@
         style="width: 100%; text-align: center"
         border>
       <el-table-column type="selection" width="55" />
-      <el-table-column label="缩略图" width="130">
+      <el-table-column prop="programImg" label="缩略图" width="130">
         <template #default="scope">
           <div style="display: flex; align-items: center">
-            <el-image :preview-src-list="scope.row.programImg"/>
+            <el-image :src="scope.row.programImg" :preview-src-list="scope.row.programImg"/>
           </div>
         </template>
       </el-table-column>
