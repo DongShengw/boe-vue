@@ -29,9 +29,9 @@
       <el-table-column prop="userUpdate" label="更新时间" sortable/>
       <el-table-column prop="userType" label="用户类型">
         <template #default="scope">
-          <el-tag v-if="scope.row.userState==1">当前用户</el-tag>
           <el-tag v-if="scope.row.userType==1" type="warning">管理员</el-tag>
-          <el-tag v-else type="info">其他用户</el-tag>
+          <el-tag v-if="scope.row.userState==1">当前用户</el-tag>
+          <el-tag v-else-if="scope.row.userType==0" type="info">其他用户</el-tag>
         </template>
       </el-table-column>
 
@@ -64,9 +64,6 @@
       <!--弹窗-->
       <el-dialog v-model="dialogVisible" title="提示" width="30%">
         <el-form :model="form" label-width="120px">
-<!--          <el-form-item label="管理员ID">-->
-<!--            <el-input v-model="form.adminId" style="width:80%"/>-->
-<!--          </el-form-item>-->
           <el-form-item label="用户ID" disabled="true">
             <el-input v-model="form.userName" style="width:80%"/>
           </el-form-item>

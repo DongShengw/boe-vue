@@ -57,7 +57,7 @@
           <el-button @click="details(scope.row)">详情</el-button>
           <el-button type="success" @click="handlePub(scope.row)">发布</el-button>
           <el-button type="primary" @click="handleEdit(scope.row)">编辑</el-button>
-          <el-popconfirm title="确认删除?" @confirm="handleDelete(scope.row.programId)">
+          <el-popconfirm title="确认删除?" @confirm="handleDelete(scope.row.noticeId)">
             <template #reference>
               <el-button type="danger">删除</el-button>
             </template>
@@ -241,9 +241,8 @@ export default {
     add(){
       this.dialogVisible = true
       this.form = {}
-      this.form.programState = 1
-      this.form.programSize = "50.0kb"
-      this.form.programAuthor = "yyx"
+      this.form.noticeState = 1
+      this.form.noticeAuthor = this.$cookies.get("data").username
       // this.form.programAuthor = this.$cookies.get("data").userName
     },
     handleSelectionChange(selections){
@@ -268,7 +267,7 @@ export default {
     },
     handleDelete(id) {
       console.log(id)
-      request.delete("/program/" + id).then(res => {
+      request.delete("/notice/" + id).then(res => {
         console.log(res)
         if(res.code === 200){
           this.$message({

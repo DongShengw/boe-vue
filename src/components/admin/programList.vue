@@ -61,7 +61,7 @@
       <el-table-column prop="programImg" label="缩略图" width="130">
         <template #default="scope">
           <div style="display: flex; align-items: center">
-            <el-image :src="scope.row.programImg" :preview-src-list="scope.row.programImg"/>
+            <el-image :src="scope.row.programImg" @click="handlePictureCardPreview(scope.row.programImg)" />
           </div>
         </template>
       </el-table-column>
@@ -139,6 +139,10 @@
       </span>
         </template>
       </el-dialog>
+
+      <el-dialog v-model="picDialogVisible"  style="height: auto;width: auto">
+        <img style="width: 100%; height: auto" fit="contain" :src="dialogImageUrl" alt="Preview Image" />
+      </el-dialog>
     </div>
   </div>
 </template>
@@ -156,6 +160,7 @@ export default {
   },
   data() {
     return {
+      dialogImageUrl:'',
       searchName:'',
       searchResolving:'',
       searchState:'',
@@ -193,6 +198,7 @@ export default {
       pageSize4: 10,
       total: 0,
       dialogVisible:false,
+      picDialogVisible:false,
       checkList:[],
       form:{},
       tableData: []
@@ -273,8 +279,12 @@ export default {
       this.form = {}
       this.form.programState = 1
       this.form.programSize = "50.0kb"
-      this.form.programAuthor = "yyx"
+      this.form.programAuthor = this.$cookies.get("data").username
       // this.form.programAuthor = this.$cookies.get("data").userName
+    },
+    handlePictureCardPreview(url){
+      this.dialogImageUrl = url
+      this.picDialogVisible = true
     },
     handleSelectionChange(selections){
       this.checkList = selections
@@ -326,3 +336,15 @@ export default {
   }
 }
 </script>
+<style scoped>
+.demo-image__error .image-slot {
+  font-size: 30px;
+}
+.demo-image__error .image-slot .el-icon {
+  font-size: 30px;
+}
+.demo-image__error .el-image {
+  width: 100%;
+  height: 200px;
+}
+</style>

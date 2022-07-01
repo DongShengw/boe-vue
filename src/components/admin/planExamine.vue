@@ -191,9 +191,7 @@
             add(){
                 this.dialogVisible = true
                 this.form = {}
-                this.form.programState = 1
-                this.form.programSize = "50.0kb"
-                this.form.programAuthor = "yyx"
+                this.form.planAuthor = this.$cookies.get("data").username
                 // this.form.programAuthor = this.$cookies.get("data").userName
             },
 

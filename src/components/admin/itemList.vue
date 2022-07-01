@@ -39,8 +39,8 @@
     </div>
   </div>
 
-  <el-dialog v-model="dialogVisible"  style="height: auto;width: 700px">
-    <img style="width: 800px; height: auto" fit="contain" :src="dialogImageUrl" alt="Preview Image" />
+  <el-dialog v-model="dialogVisible" title="图片" style="height: auto;width: auto">
+    <img style="width: 100%; height: auto" fit="contain" :src="dialogImageUrl" alt="Preview Image" />
   </el-dialog>
 </template>
 
@@ -82,7 +82,22 @@ export default {
       this.dialogVisible = true
     },
     handleRemove(uploadFile){
-
+      console.log(uploadFile)
+      request.delete("/img/" + uploadFile.imgId).then(res => {
+        console.log(res)
+        if(res.code === 200){
+          this.$message({
+            type:"success",
+            message:"删除成功"
+          })
+        }else{
+          this.$message({
+            type:"error",
+            message:res.msg
+          })
+        }
+        this.load()//刷新表格的数剧
+      })
     }
   }
 }

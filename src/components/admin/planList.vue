@@ -355,10 +355,9 @@ export default {
     add(){
       this.dialogVisible = true
       this.form = {}
-      this.form.listState = 1
-      this.form.listAuthor = "yyx"
-      this.form.listReviewer = "yyx"
-      // this.form.listAuthor = this.$cookies.get("data").userName
+      this.form.listState = 5
+      this.form.listAuthor = this.$cookies.get("data").username
+      this.form.listReviewer = this.$cookies.get("data").username
     },
 
     handleSelectionChange(selections){
