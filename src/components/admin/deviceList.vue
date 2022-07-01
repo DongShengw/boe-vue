@@ -1,6 +1,5 @@
 <template>
   <div v-wechat-title="$route.meta.title" class="home" style="padding: 20px">
-
     <!--    搜索-->
     <div style="margin: 10px 0">
       <el-input
@@ -15,7 +14,7 @@
         style="width: 20%; margin-right: 20px"
         clearable
       >
-      <el-option
+        <el-option
           v-for="item in mechanism"
           :key="item.value"
           :value="item.value"
@@ -27,11 +26,8 @@
         style="width: 20%; margin-right: 20px"
         clearable
       >
-      <el-option
-          v-for="item in group"
-          :key="item.value"
-          :value="item.value"
-        /></el-select>
+        <el-option v-for="item in group" :key="item.value" :value="item.value"
+      /></el-select>
       <el-input
         v-model="searchMAC"
         placeholder="MAC地址"
@@ -45,7 +41,7 @@
         placeholder="分辨率"
         style="width: 20%; margin-right: 20px"
         clearable
-      ><el-option
+        ><el-option
           v-for="item in resolving"
           :key="item.value"
           :value="item.value"
@@ -56,12 +52,12 @@
         placeholder="设备状态"
         style="width: 20%; margin-right: 20px"
         clearable
-      ><el-option
+        ><el-option
           v-for="item in state"
           :key="item.value"
           :label="item.label"
           :value="item.value"
-        /></el-select>
+      /></el-select>
       <el-select
         v-model="searchSystem"
         placeholder="系统版本"
@@ -108,19 +104,19 @@
       <el-table-column prop="resolvingPower" label="分辨率" />
       <el-table-column prop="deviceState" label="设备状态">
         <template #default="scope">
-          <el-tag v-if="scope.row.deviceState==1" type="success">空闲</el-tag>
-          <el-tag v-if="scope.row.deviceState==2">播放</el-tag>
-          <el-tag v-if="scope.row.deviceState==0" type="danger">离线</el-tag>
+          <el-tag v-if="scope.row.deviceState == 1" type="success">空闲</el-tag>
+          <el-tag v-if="scope.row.deviceState == 2">播放</el-tag>
+          <el-tag v-if="scope.row.deviceState == 0" type="danger">离线</el-tag>
         </template>
       </el-table-column>
       <el-table-column prop="deviceSystem" label="系统升级" />
       <el-table-column prop="deviceSchedule" label="当前计划" />
 
-    <!--    功能-->
-      <el-table-column label="操作"  width="400">
+      <!--    功能-->
+      <el-table-column label="操作" width="400">
         <template #default="scope">
           <el-button @click="details(scope.row)">详情</el-button>
-          <el-button @click="handleEdit(scope.row)">控制</el-button>
+          <el-button @click="control(scope.row)">控制</el-button>
           <el-button @click="handleEdit(scope.row)">编辑</el-button>
           <el-popconfirm
             title="确认删除?"
@@ -170,35 +166,36 @@
         <el-form :model="form" label-width="120px">
           <el-tabs type="border-card">
             <el-tab-pane label="设备信息">
-              设备型号：HiDPTAndroid Hi3751V553<br>
-              系统版本：BOE_iGallery32_V13103_V5.2.0<br>
-              设备IP:192.168.53.212<br>
-              信发版本：1.3.1<br>
-              有线MAC地址：A0BB3ED3861D<br>
-              无线MAC地址：A0BB3ED2F376<br>
-              运行内存：0.96 GB<br>
-              SN：T232BS200721000123<br>
-              存储空间： 4.65 GB可用（共 5.39 GB）<br>
-              激活时间：2022-06-23 10:40:12<br>
+              设备型号：HiDPTAndroid Hi3751V553<br />
+              系统版本：BOE_iGallery32_V13103_V5.2.0<br />
+              设备IP:192.168.53.212<br />
+              信发版本：1.3.1<br />
+              有线MAC地址：A0BB3ED3861D<br />
+              无线MAC地址：A0BB3ED2F376<br />
+              运行内存：0.96 GB<br />
+              SN：T232BS200721000123<br />
+              存储空间： 4.65 GB可用（共 5.39 GB）<br />
+              激活时间：2022-06-23 10:40:12<br />
             </el-tab-pane>
             <el-tab-pane label="安装信息">
-              设备名称：测试误删<br>
-              注册时间：2022-06-27 14:31:14<br>
-              所属分组：11111<br>
-              分辨率：1920x1080<br>
-              所属机构：城院罗老师测试<br>
-              屏显方式：横屏<br>
-              安装位置：中国浙江省杭州市拱墅区上塘街道东教路<br>
+              设备名称：测试误删<br />
+              注册时间：2022-06-27 14:31:14<br />
+              所属分组：11111<br />
+              分辨率：1920x1080<br />
+              所属机构：城院罗老师测试<br />
+              屏显方式：横屏<br />
+              安装位置：中国浙江省杭州市拱墅区上塘街道东教路<br />
             </el-tab-pane>
             <el-tab-pane label="状态信息">
               <span>设备状态: </span>
-                <el-tag v-if="form.deviceState==1" type="success">空闲</el-tag>
-                <el-tag v-if="form.deviceState==2">播放</el-tag>
-                <el-tag v-if="form.deviceState==0" type="danger">离线</el-tag>
-              <br>
-              <span>当前计划：{{form.deviceSchedule}}</span><br>
-              <span>设备运行时长：1 天 30 分钟</span><br>
-              <span>最后心跳时间: 2022-06-27 16:01:20</span><br>
+              <el-tag v-if="form.deviceState == 1" type="success">空闲</el-tag>
+              <el-tag v-if="form.deviceState == 2">播放</el-tag>
+              <el-tag v-if="form.deviceState == 0" type="danger">离线</el-tag>
+              <br />
+              <span>当前计划：{{ form.deviceSchedule }}</span
+              ><br />
+              <span>设备运行时长：1 天 30 分钟</span><br />
+              <span>最后心跳时间: 2022-06-27 16:01:20</span><br />
             </el-tab-pane>
           </el-tabs>
         </el-form>
@@ -206,6 +203,21 @@
           <span class="dialog-footer">
             <el-button @click="dv2 = false">取消</el-button>
             <el-button type="primary" @click="save1">确认</el-button>
+          </span>
+        </template>
+      </el-dialog>
+
+      <el-dialog v-model="dv3" title="控制设备" width="30%">
+        <el-form :model="form" label-width="120px">
+          <el-button type="primary" >开机</el-button>
+          <el-button type="primary" >更新</el-button>
+          <el-button type="primary" >播放</el-button>
+          <el-button type="primary" >定时</el-button>
+        </el-form>
+        <template #footer>
+          <span class="dialog-footer">
+            <el-button @click="dv3 = false">取消</el-button>
+            <el-button type="primary" @click="save2">确认</el-button>
           </span>
         </template>
       </el-dialog>
@@ -237,6 +249,7 @@ export default {
       total: 0,
       dv1: false,
       dv2: false,
+      dv3: false,
       form: {},
       form1: {},
       tableData: [],
@@ -316,30 +329,24 @@ export default {
           this.tableData = res.data.records;
           this.total = res.data.total;
         });
-        request
-        .get("/device/schedule", {
-        })
-        .then((res) => {
-          console.log(res);
-          this.schedule = []
-          for (let i = 0; i < res.data.length; i++) {
-            var obj ={}
-            obj.value=res.data[i]
-            this.schedule.push(obj)
-          }
-        });
-        request
-        .get("/device/group", {
-        })
-        .then((res) => {
-          console.log(res);
-          this.group = []
-          for (let i = 0; i < res.data.length; i++) {
-            var obj ={}
-            obj.value=res.data[i]
-            this.group.push(obj)
-          }
-        });
+      request.get("/device/schedule", {}).then((res) => {
+        console.log(res);
+        this.schedule = [];
+        for (let i = 0; i < res.data.length; i++) {
+          var obj = {};
+          obj.value = res.data[i];
+          this.schedule.push(obj);
+        }
+      });
+      request.get("/device/group", {}).then((res) => {
+        console.log(res);
+        this.group = [];
+        for (let i = 0; i < res.data.length; i++) {
+          var obj = {};
+          obj.value = res.data[i];
+          this.group.push(obj);
+        }
+      });
     },
     reset() {
       this.searchName = "";
@@ -350,11 +357,14 @@ export default {
       this.searchState = "";
       this.searchSchedule = "";
       this.searchSystem = "";
-      this.load()
+      this.load();
     },
     details(row) {
       this.dv2 = true;
       this.form = JSON.parse(JSON.stringify(row));
+    },
+    save2() {
+      this.dv3 = false; //关闭弹窗
     },
     save1() {
       this.dv2 = false; //关闭弹窗
@@ -381,6 +391,10 @@ export default {
     handleEdit(row) {
       this.form = JSON.parse(JSON.stringify(row));
       this.dv1 = true;
+    },
+    control(row) {
+      this.form = JSON.parse(JSON.stringify(row));
+      this.dv3 = true;
     },
     handleDelete(id) {
       console.log(id);
