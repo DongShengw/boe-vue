@@ -147,20 +147,6 @@ export default {
           value: "0",
         },
       ],
-      resolving: [
-        {
-          value: "1920*1080(横)",
-        },
-        {
-          value: "1080*1920(竖)",
-        },
-        {
-          value: "3840*2160(横)",
-        },
-        {
-          value: "2160*3840(竖)",
-        },
-      ],
       currentPage4: 1,
       pageSize4: 10,
       total: 0,
@@ -241,7 +227,7 @@ export default {
     add(){
       this.dialogVisible = true
       this.form = {}
-      this.form.noticeState = 1
+      this.form.noticeState = 3
       this.form.noticeAuthor = this.$cookies.get("data").username
       // this.form.programAuthor = this.$cookies.get("data").userName
     },
@@ -256,7 +242,7 @@ export default {
     },
     Delete(){
       this.checkList.forEach(item => (
-          this.handleDelete(item.programId)
+          this.handleDelete(item.noticeId)
       ))
     },
     pub(){

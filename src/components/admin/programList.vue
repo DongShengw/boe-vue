@@ -132,8 +132,8 @@
             </el-select>
           </el-form-item>
           <el-form-item label="图片">
-              <el-image v-if="selectPicUrl" :src="selectPicUrl" />
-              <el-button @click="selectPic" type="primary">选择图片</el-button>>
+              <el-image v-if="selectPicUrl" :src="selectPicUrl" style="margin-bottom: 10px"/>
+              <el-button  @click="selectPic" type="primary">选择图片</el-button>
           </el-form-item>
         </el-form>
         <template #footer>
@@ -297,6 +297,7 @@ export default {
           this.dialogVisible = false  //关闭弹窗
         })
       }
+      this.selectPicUrl =''
     },
     handleEdit(row) {
       this.form = JSON.parse(JSON.stringify(row))
@@ -313,6 +314,7 @@ export default {
     add(){
       this.dialogVisible = true
       this.form = {}
+      this.selectPicUrl =''
       this.form.programState = 1
       this.form.programSize = "50.0kb"
       this.form.programAuthor = this.$cookies.get("data").username
