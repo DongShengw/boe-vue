@@ -158,7 +158,7 @@
           </template>
           <div class="card-body">
             <el-table :data="tableData" max-height="200" style="width: 100%">
-              <el-table-column fixed prop="id" label="序号" width="100" />
+              <el-table-column fixed type="index" label="序号" width="100" />
               <el-table-column prop="name" label="计划名称" width="180" />
               <el-table-column prop="state" label="计划状态" width="150">
                 <template #default="scope">
