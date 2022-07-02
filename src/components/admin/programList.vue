@@ -131,11 +131,42 @@
               <el-option label="10s" value="10s" />
             </el-select>
           </el-form-item>
+          <el-form-item label="图片">
+              <el-image v-if="selectPicUrl" :src="selectPicUrl" />
+              <el-button @click="selectPic" type="primary">选择图片</el-button>>
+          </el-form-item>
         </el-form>
         <template #footer>
       <span class="dialog-footer">
         <el-button @click="dialogVisible = false">取消</el-button>
         <el-button type="primary" @click="save">确认</el-button>
+      </span>
+        </template>
+      </el-dialog>
+
+      <el-dialog v-model="picListDialogVisible" title="图片选择" width="40%">
+        <el-table
+            :data="fileList"
+            stripe
+            highlight-current-row
+            @current-change="handleSelectChange"
+            style="width: 100%; text-align: center"
+            border
+        >
+          <el-table-column type="index" width="55" />
+          <el-table-column prop="url" label="缩略图" width="130">
+            <template #default="scope">
+              <div style="display: flex; align-items: center">
+                <el-image :src="scope.row.url" @click="handlePictureCardPreview(scope.row.url)" />
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column prop="name" label="节目名称"/>
+        </el-table>
+        <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="picListDialogVisible = false">取消</el-button>
+        <el-button type="primary" @click="picListDialogVisible = false">确认</el-button>
       </span>
         </template>
       </el-dialog>
@@ -160,11 +191,13 @@ export default {
   },
   data() {
     return {
+      selectPicUrl:'',
       dialogImageUrl:'',
       searchName:'',
       searchResolving:'',
       searchState:'',
       edit:0,
+      fileList:[],
       isAll:true,
       state: [
         {
@@ -199,6 +232,7 @@ export default {
       total: 0,
       dialogVisible:false,
       picDialogVisible:false,
+      picListDialogVisible:false,
       checkList:[],
       form:{},
       tableData: []
@@ -224,7 +258,9 @@ export default {
       })
     },
     save(){
+      this.form.programImg = this.selectPicUrl
       if(this.edit){
+        console.log(this.form)
         request.put("/program",this.form).then(res => {
           console.log(res)
           if(res.code === 200){
@@ -261,10 +297,10 @@ export default {
           this.dialogVisible = false  //关闭弹窗
         })
       }
-
     },
     handleEdit(row) {
       this.form = JSON.parse(JSON.stringify(row))
+      this.selectPicUrl = this.form.programImg
       this.dialogVisible = true
       this.edit = 1
     },
@@ -281,6 +317,17 @@ export default {
       this.form.programSize = "50.0kb"
       this.form.programAuthor = this.$cookies.get("data").username
       // this.form.programAuthor = this.$cookies.get("data").userName
+    },
+    selectPic(){
+      request.get("/img").then(res => {
+        console.log(res)
+        this.fileList = res.data.records
+      })
+      this.picListDialogVisible = true
+    },
+    handleSelectChange(currentRow){
+      this.selectPicUrl = currentRow.url
+      console.log(currentRow)
     },
     handlePictureCardPreview(url){
       this.dialogImageUrl = url
