@@ -14,8 +14,8 @@
 
 <script>
 
-import AdminHeader from "@/components/header/AdminHeader";
-import AdminAside from "@/components/aside/AdminAside";
+import AdminHeader from "@/components/header/Header";
+import AdminAside from "@/components/aside/Aside";
 
 export default {
   name: "AdminLayout",

@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
-import AdminLayout from "@/layout/AdminLayout";
+import AdminLayout from "@/layout/Layout";
 
 
 const routes = [
@@ -16,7 +16,7 @@ const routes = [
       {
         path: '/adminManage',
         name: 'adminManage',
-        component: () => import("@/components/admin/AdminManage"),
+        component: () => import("@/components/views/userManage"),
         meta:{
           title:'用户管理'
         }
@@ -24,7 +24,7 @@ const routes = [
       {
         path: '/itemList',
         name: 'itemList',
-        component: () => import("@/components/admin/itemList"),
+        component: () => import("@/components/views/itemList"),
         meta:{
           title:'素材管理'
         }
@@ -32,7 +32,7 @@ const routes = [
       {
         path: '/deviceList',
         name: 'deviceList',
-        component: () => import("@/components/admin/deviceList"),
+        component: () => import("@/components/views/deviceList"),
         meta:{
           title:'设备管理'
         }
@@ -40,7 +40,7 @@ const routes = [
       {
         path: '/programList',
         name: 'programList',
-        component: () => import("@/components/admin/programList"),
+        component: () => import("@/components/views/programList"),
         meta:{
           title:'节目列表'
         }
@@ -48,7 +48,7 @@ const routes = [
       {
         path: '/noticeList',
         name: 'noticeList',
-        component: () => import("@/components/admin/noticeList"),
+        component: () => import("@/components/views/noticeList"),
         meta:{
           title:'计划列表'
         }
@@ -56,7 +56,7 @@ const routes = [
       {
         path: '/home',
         name: 'home',
-        component: () => import("@/components/admin/home"),
+        component: () => import("@/components/views/home"),
         meta:{
           title:'首页概览'
         }
@@ -64,7 +64,7 @@ const routes = [
       {
         path: '/planList',
         name: 'planList',
-        component: () => import("@/components/admin/planList"),
+        component: () => import("@/components/views/planList"),
         meta:{
           title:'计划列表'
         }
@@ -72,7 +72,7 @@ const routes = [
       {
         path: '/planExamine',
         name: 'planExamine',
-        component: () => import("@/components/admin/planExamine"),
+        component: () => import("@/components/views/planExamine"),
         meta:{
           title:'计划列表'
         }
