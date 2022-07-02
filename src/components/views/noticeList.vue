@@ -169,20 +169,6 @@ export default {
           value: "0",
         },
       ],
-      resolving: [
-        {
-          value: "1920*1080(横)",
-        },
-        {
-          value: "1080*1920(竖)",
-        },
-        {
-          value: "3840*2160(横)",
-        },
-        {
-          value: "2160*3840(竖)",
-        },
-      ],
       currentPage4: 1,
       pageSize4: 10,
       total: 0,
@@ -260,11 +246,19 @@ export default {
       this.searchState = "";
       this.load();
     },
+<<<<<<< HEAD:src/components/admin/noticeList.vue
     add() {
       this.dialogVisible = true;
       this.form = {};
       this.form.noticeState = 1;
       this.form.noticeAuthor = this.$cookies.get("data").username;
+=======
+    add(){
+      this.dialogVisible = true
+      this.form = {}
+      this.form.noticeState = 3
+      this.form.noticeAuthor = this.$cookies.get("data").username
+>>>>>>> 2aee5cdfac60f9cb86d01053c14e1f57d0493aed:src/components/views/noticeList.vue
       // this.form.programAuthor = this.$cookies.get("data").userName
     },
     handleSelectionChange(selections) {
@@ -276,8 +270,15 @@ export default {
       }
       console.log(this.checkList);
     },
+<<<<<<< HEAD:src/components/admin/noticeList.vue
     Delete() {
       this.checkList.forEach((item) => this.handleDelete(item.programId));
+=======
+    Delete(){
+      this.checkList.forEach(item => (
+          this.handleDelete(item.noticeId)
+      ))
+>>>>>>> 2aee5cdfac60f9cb86d01053c14e1f57d0493aed:src/components/views/noticeList.vue
     },
     pub() {},
     handlePub(row) {

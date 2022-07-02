@@ -1,11 +1,10 @@
 <template>
   <div v-wechat-title="$route.meta.title">
     <el-menu
-        style="width: 200px; height:calc(100vh - 50px)"
+        style="width: 200px; height:calc(100vh - 60px)"
         router
-        active-text-color="#ffd04b"
-        background-color="#545c64"
-        text-color="#fff"
+        collapse-transition
+        unique-opened
         class="el-menu-vertical-demo">
       <el-menu-item index="home">
         <template #title>

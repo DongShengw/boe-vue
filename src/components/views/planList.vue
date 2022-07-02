@@ -51,7 +51,7 @@
       <el-table-column label="缩略图" width="130">
         <template #default="scope">
           <div style="display: flex; align-items: center">
-            <el-image :preview-src-list="scope.row.programImg"/>
+            <el-image :src="scope.row.listImg"  @click="handlePictureCardPreview(scope.row.listImg)"/>
           </div>
         </template>
       </el-table-column>
@@ -73,7 +73,7 @@
       <el-table-column prop="listUpdate" label="更新时间" />
       <el-table-column label="操作" width="350">
         <template #default="scope">
-          <el-button @click="details">详情</el-button>
+          <el-button @click="details(scope.row)">详情</el-button>
           <el-button @click="handleEdit(scope.row)">修改</el-button>
           <el-popconfirm
               title="确认删除?"
@@ -110,16 +110,24 @@
             <el-tab-pane label="计划详情">
 
                 <el-descriptions title="">
-                  <el-descriptions-item label="计划名称">plan0</el-descriptions-item>
-                  <el-descriptions-item label="播放日期">2022-06-29</el-descriptions-item>
-                  <el-descriptions-item label="发布状态">待发布</el-descriptions-item>
-                  <el-descriptions-item label="创建时间">2022-06-29 09:24:26</el-descriptions-item>
-                  <el-descriptions-item label="播放时段">
-                    按时段播放<br>
-                    循环类型:每天<br>
-                    循环时间段:8:00-20:00
+                  <el-descriptions-item label="计划名称">{{ form.listName }}</el-descriptions-item>
+                  <el-descriptions-item label="播放日期">{{ form.playTime }}</el-descriptions-item>
+                  <el-descriptions-item label="发布状态">
+                    <template #default="scope">
+                      <el-tag v-if="form.listState==5" type="danger">待发布</el-tag>
+                      <el-tag v-if="form.listState==4" type="warning">发布中</el-tag>
+                      <el-tag v-if="form.listState==3" type="success">发布成功</el-tag>
+                      <el-tag v-if="form.listState==2" type="danger">发布失败</el-tag>
+                      <el-tag v-if="form.listState==1" type="info">已结束</el-tag>
+                      <el-tag v-if="form.listState==0" >审核中</el-tag>
+                    </template>
+                  </el-descriptions-item>
+                  <el-descriptions-item label="更新日期">{{ form.listUpdate }}</el-descriptions-item>
+                  <el-descriptions-item label="播放模式">
+                    {{ form.playPattern }}
                   </el-descriptions-item>
                 </el-descriptions>
+              <el-image :src="form.listImg" style="width: auto;height: 60%"/>
 
             </el-tab-pane>
 
@@ -200,6 +208,11 @@
             </el-col>
           </el-form-item>
 
+          <el-form-item label="节目">
+            <el-image v-if="selectPicUrl" :src="selectPicUrl" style="margin-bottom: 10px"/>
+            <el-button @click="selectProgram" type="primary">选择节目</el-button>
+          </el-form-item>
+
         </el-form>
         <template #footer>
                     <span class="dialog-footer">
@@ -207,6 +220,40 @@
                         <el-button type="primary" @click="save">确认</el-button>
                     </span>
         </template>
+      </el-dialog>
+      <el-dialog v-model="picListDialogVisible" title="节目选择" width="40%">
+        <el-table
+                :data="ProData"
+                stripe
+                highlight-current-row
+                @current-change="handleSelectChange"
+                style="width: 100%; text-align: center"
+                border>
+          <el-table-column type="index" width="55" />
+          <el-table-column prop="programImg" label="缩略图" width="130">
+            <template #default="scope">
+              <div style="display: flex; align-items: center">
+                <el-image :src="scope.row.programImg" @click="handlePictureCardPreview(scope.row.programImg)" />
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column prop="programName" label="节目名称" sortable/>
+          <el-table-column prop="resolvingPower" label="分辨率"/>
+          <el-table-column prop="programTime" label="节目时长"/>
+          <el-table-column prop="programSize" label="节目大小"/>
+
+        </el-table>
+
+        <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="picListDialogVisible = false">取消</el-button>
+        <el-button type="primary" @click="picListDialogVisible = false">确认</el-button>
+      </span>
+        </template>
+      </el-dialog>
+
+      <el-dialog v-model="picDialogVisible"  style="height: auto;width: auto">
+        <img style="width: 100%; height: auto" fit="contain" :src="dialogImageUrl" alt="Preview Image" />
       </el-dialog>
     </div>
   </div>
@@ -225,8 +272,10 @@ export default {
   },
   data() {
     return {
+      selectPicUrl:'',
       planName:'',
       planState:'',
+      picDialogVisible:false,
       edit:0,
       isAll:true,
       state: [
@@ -263,8 +312,11 @@ export default {
       checkList:[],
       form:{},
       tableData: [],
+      ProData:[],
       deviceData:[],
       pl1:false,
+      fileList:[],
+      picListDialogVisible:false,
     }
   },
   created() {
@@ -298,6 +350,7 @@ export default {
       })
     },
     save(){
+      this.form.listImg = this.selectPicUrl
       if(this.edit){
         request.put("/schedule-list",this.form).then(res => {
           console.log(res)
@@ -313,6 +366,7 @@ export default {
             })
           }
           this.edit = 0
+          this.selectPicUrl=''
           this.load()//刷新表格的数据
           this.dialogVisible = false  //关闭弹窗
         })
@@ -337,14 +391,52 @@ export default {
       }
 
     },
+    handlePictureCardPreview(url){
+      this.dialogImageUrl = url
+      this.picDialogVisible = true
+    },
+    handleSelectChange(currentRow){
+      this.selectPicUrl = currentRow.programImg
+      console.log(currentRow)
+    },
+    loadPro(){
+      request.get("/program", {
+        params:{
+          pageNum:this.currentPage4,
+          pageSize:this.pageSize4,
+        }
+      }).then(res => {
+        console.log(res)
+        this.ProData = res.data.records
+        this.total = res.data.total
+      })
+
+    },
+    selectPic(){
+      request.get("/img").then(res => {
+        console.log(res)
+        this.fileList = res.data.records
+      })
+      this.picListDialogVisible = true
+    },
+    selectProgram(){
+      this.loadPro()
+      request.get("/img").then(res => {
+        console.log(res)
+        this.fileList = res.data.records
+      })
+      this.picListDialogVisible = true
+    },
     details(row){
       this.loadDevice()
+      this.form=JSON.parse(JSON.stringify(row));
       this.pl1=true;
-      // this.form=JSON.parse(JSON.stringify());
     },
     handleEdit(row) {
       this.form = JSON.parse(JSON.stringify(row))
       this.dialogVisible = true
+      this.selectPicUrl = this.form.listImg
+
       this.edit = 1
     },
     reset() {
@@ -355,6 +447,7 @@ export default {
     add(){
       this.dialogVisible = true
       this.form = {}
+      this.selectPicUrl = ''
       this.form.listState = 5
       this.form.listAuthor = this.$cookies.get("data").username
       this.form.listReviewer = this.$cookies.get("data").username
