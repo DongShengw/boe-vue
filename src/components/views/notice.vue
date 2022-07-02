@@ -126,14 +126,14 @@ export default {
   display: flex;
 }
 .left {
-  width: 68%;
+  width: 66%;
   .screen {
     width: 100%;
     height: 500px;
     background: url("/src/assets/img/screen.png");
     background-size: cover;
     overflow: hidden;
-    padding-bottom: 40px;
+    padding-bottom: 42px;
     .screenWarp {
       padding-left: 20px;
       padding-top: 40px;
@@ -141,12 +141,12 @@ export default {
       height: 100%;
       width: 100%;
       .background {
-        width: 927px;
+        width: 920px;
         margin-top: 40px;
         margin-left: 18px;
         z-index: 1000;
         .text {
-          width: 927px;
+          width: 920px;
           z-index: 1001;
           p {
             word-wrap: break-word;

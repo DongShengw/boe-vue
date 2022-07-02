@@ -56,9 +56,9 @@ const routes = [
       {
         path: '/notice',
         name: 'notice',
-        component: () => import("@/components/admin/notice"),
+        component: () => import("@/components/views/notice"),
         meta:{  
-          title:'公告列表'
+          title:'发布公告'
         }
       },
       {
