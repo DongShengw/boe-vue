@@ -50,7 +50,15 @@ const routes = [
         name: 'noticeList',
         component: () => import("@/components/admin/noticeList"),
         meta:{
-          title:'计划列表'
+          title:'公告列表'
+        }
+      },
+      {
+        path: '/notice',
+        name: 'notice',
+        component: () => import("@/components/admin/notice"),
+        meta:{  
+          title:'公告列表'
         }
       },
       {
@@ -74,7 +82,7 @@ const routes = [
         name: 'planExamine',
         component: () => import("@/components/admin/planExamine"),
         meta:{
-          title:'计划列表'
+          title:'计划审核'
         }
       }
     ]
