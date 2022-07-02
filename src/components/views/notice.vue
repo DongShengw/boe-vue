@@ -15,7 +15,7 @@
               <marquee
                 behavior="scroll"
                 direction="left"
-                :scrollamount = this.value
+                :scrollamount="this.value"
               >
                 <p
                   :style="{
@@ -88,6 +88,10 @@
             </el-select>
           </div>
         </div>
+      </div>
+      <div class="button">
+        <el-button @click="$router.go(-1)">取消</el-button>
+        <el-button type="primary" @click="$router.go(-1)">确认</el-button>
       </div>
     </div>
   </div>
@@ -186,6 +190,10 @@ export default {
         margin-right: 20px;
       }
     }
+  }
+  .button{
+    margin-top: 230px;
+    margin-left: 100px;
   }
 }
 </style>
