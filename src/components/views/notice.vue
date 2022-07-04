@@ -130,8 +130,7 @@ export default {
   },
   methods: {
       save(){
-        request.post("/pub-notice", {
-          params: {
+        var form = {
             pubNoticeContent: this.input,
             pubNoticeTextcolor: this.color1,
             pubNoticeTextsize: this.value1,
@@ -139,8 +138,8 @@ export default {
             pubNoticeBghigh: this.value2,
             pubNoticeTexthigh: this.value3,
             pubNoticePlayspeed: this.value,
-          },
-        })
+            }
+        request.post("/pub-notice", form)
         .then((res) => {
           console.log(res);
         });
