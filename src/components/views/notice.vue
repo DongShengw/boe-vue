@@ -91,12 +91,17 @@
       </div>
       <div class="button">
         <el-button @click="$router.go(-1)">取消</el-button>
-        <el-button type="primary" @click="$router.go(-1)">确认</el-button>
+        <el-button type="primary" @click="save()">确认</el-button>
       </div>
     </div>
   </div>
 </template>
 <script>
+
+import router from '@/router';
+import request from "@/utils/request";
+
+
 export default {
   data() {
     return {
@@ -123,6 +128,25 @@ export default {
       ],
     };
   },
+  methods: {
+      save(){
+        request.post("/pub-notice", {
+          params: {
+            pubNoticeContent: this.input,
+            pubNoticeTextcolor: this.color1,
+            pubNoticeTextsize: this.value1,
+            pubNoticeBgcolor: this.color2,
+            pubNoticeBghigh: this.value2,
+            pubNoticeTexthigh: this.value3,
+            pubNoticePlayspeed: this.value,
+          },
+        })
+        .then((res) => {
+          console.log(res);
+        });
+        router.go(-1);
+      }
+  }
 };
 </script>
 <style lang="scss" scoped>

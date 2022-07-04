@@ -209,10 +209,10 @@
 
       <el-dialog v-model="dv3" title="控制设备" width="30%">
         <el-form :model="form" label-width="120px">
-          <el-button type="primary" >开机</el-button>
-          <el-button type="primary" >更新</el-button>
-          <el-button type="primary" >播放</el-button>
-          <el-button type="primary" >定时</el-button>
+          <el-button type="primary">开机</el-button>
+          <el-button type="primary">更新</el-button>
+          <el-button type="primary">播放</el-button>
+          <el-button type="primary">定时</el-button>
         </el-form>
         <template #footer>
           <span class="dialog-footer">
