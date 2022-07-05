@@ -45,7 +45,7 @@
       border
     >
       <el-table-column type="selection" width="55" />
-      <el-table-column prop="noticeContent" label="公告内容" sortable />
+      <el-table-column prop="noticeContent" label="公告标题" sortable />
       <el-table-column prop="noticeTime" label="播放时间" />
       <el-table-column prop="noticeState" label="公告状态">
         <template #default="scope">
@@ -105,7 +105,7 @@
       <!--弹窗-->
       <el-dialog v-model="dialogVisible" title="提示" width="30%">
         <el-form :model="form" label-width="120px">
-          <el-form-item label="公告内容" disabled="true">
+          <el-form-item label="公告标题" disabled="true">
             <el-input v-model="form.noticeContent" style="width: 80%" />
           </el-form-item>
           <el-form-item label="播放时间">
@@ -233,6 +233,9 @@ export default {
           this.load(); //刷新表格的数据
           this.dialogVisible = false; //关闭弹窗
         });
+        this.$router.push({
+        path: "/notice",
+      });
       }
     },
     handleEdit(row) {
@@ -249,7 +252,7 @@ export default {
     add() {
       this.dialogVisible = true;
       this.form = {};
-      this.form.noticeState = 1;
+      this.form.noticeState = 3;
       this.form.noticeAuthor = this.$cookies.get("data").username;
       // this.form.programAuthor = this.$cookies.get("data").userName
     },
@@ -263,16 +266,15 @@ export default {
       console.log(this.checkList);
     },
     Delete() {
-      this.checkList.forEach((item) => this.handleDelete(item.programId));
+      this.checkList.forEach((item) => this.handleDelete(item.noticeId));
     },
     pub() {},
     handlePub(row) {
-      this.$router.push({
-        path: "/notice",
-        query: {
-          id: row.programId,
-        },
-      });
+      this.edit = 1;
+      this.form = JSON.parse(JSON.stringify(row));
+      this.form.noticeState = 4 ;
+      this.save();
+      this.load();
     },
     handleDelete(id) {
       console.log(id);
