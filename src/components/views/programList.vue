@@ -312,12 +312,12 @@ export default {
       this.load()
     },
     add(){
-      this.dialogVisible = true
       this.form = {}
       this.selectPicUrl =''
       this.form.programState = 1
       this.form.programSize = "50.0kb"
       this.form.programAuthor = this.$cookies.get("data").username
+      this.dialogVisible = true
       // this.form.programAuthor = this.$cookies.get("data").userName
     },
     selectPic(){
@@ -350,10 +350,36 @@ export default {
       ))
     },
     pub(){
-
+      // request.post("/pub-program", )
     },
-    handlePub(id){
-
+    handlePub(row){
+        let pic = {}
+        pic.pubProgramImg = JSON.parse(JSON.stringify(row)).programImg
+        request.post("/pub-program",pic).then(res => {
+          console.log(res)
+          if(res.code === 200){
+            this.$message({
+              type:"success",
+              message:"发布成功"
+            })
+            request.put("/program/state",JSON.parse(JSON.stringify(row)).programId).then(res => {
+              if(res.code === 200){
+              }else{
+                this.$message({
+                  type:"error",
+                  message:res.msg
+                })
+              }
+              this.load()//刷新表格的数剧
+            })
+          }else{
+            this.$message({
+              type:"error",
+              message:res.msg
+            })
+          }
+          this.load()//刷新表格的数据
+        })
     },
     handleDelete(id) {
       console.log(id)

@@ -83,7 +83,7 @@
               <el-button type="danger">删除</el-button>
             </template>
           </el-popconfirm>
-          <el-button @click="pushs">发布</el-button>
+          <el-button @click="handlePub(scope.row)">发布</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -452,7 +452,35 @@ export default {
       this.form.listAuthor = this.$cookies.get("data").username
       this.form.listReviewer = this.$cookies.get("data").username
     },
-
+    handlePub(row){
+      let pic = {}
+      pic.pubProgramImg = JSON.parse(JSON.stringify(row)).listImg
+      request.post("/pub-program",pic).then(res => {
+        console.log(res)
+        if(res.code === 200){
+          this.$message({
+            type:"success",
+            message:"发布成功"
+          })
+          request.put("/program/state",JSON.parse(JSON.stringify(row)).programId).then(res => {
+            if(res.code === 200){
+            }else{
+              this.$message({
+                type:"error",
+                message:res.msg
+              })
+            }
+            this.load()//刷新表格的数剧
+          })
+        }else{
+          this.$message({
+            type:"error",
+            message:res.msg
+          })
+        }
+        this.load()//刷新表格的数据
+      })
+    },
     handleSelectionChange(selections){
       this.checkList = selections
       if(Object.keys(selections).length === 0){
@@ -468,9 +496,6 @@ export default {
       ))
     },
     pub(){
-
-    },
-    handlePub(id){
 
     },
     handleDelete(id) {
