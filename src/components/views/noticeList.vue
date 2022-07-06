@@ -273,6 +273,10 @@ export default {
       this.edit = 1;
       this.form = JSON.parse(JSON.stringify(row));
       this.form.noticeState = 4 ;
+      request.post("/pub-notice", this.$cookies.get("notice"))
+        .then((res) => {
+          console.log(res);
+        });
       this.save();
       this.load();
     },

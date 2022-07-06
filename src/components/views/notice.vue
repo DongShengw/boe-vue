@@ -139,10 +139,11 @@ export default {
             pubNoticeTexthigh: this.value3,
             pubNoticePlayspeed: this.value,
             }
-        request.post("/pub-notice", form)
-        .then((res) => {
-          console.log(res);
-        });
+        this.$cookies.set("notice",form)
+        // request.post("/pub-notice", form)
+        // .then((res) => {
+        //   console.log(res);
+        // });
         router.go(-1);
       }
   }
@@ -157,23 +158,23 @@ export default {
   .screen {
     width: 100%;
     height: 500px;
-    background: url("/src/assets/img/screen.png");
     background-size: cover;
     overflow: hidden;
     padding-bottom: 42px;
+    //border: solid 1px #000000;
     .screenWarp {
-      padding-left: 20px;
-      padding-top: 40px;
+      margin-left: 20px;
+      margin-top: 40px;
       overflow: hidden;
+      border: solid 1px #000000;
       height: 100%;
-      width: 100%;
+      width: 96%;
       .background {
-        width: 920px;
+        width: 100%;
         margin-top: 40px;
-        margin-left: 18px;
         z-index: 1000;
         .text {
-          width: 920px;
+          width: 100%;
           z-index: 1001;
           p {
             word-wrap: break-word;
